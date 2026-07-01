@@ -1,509 +1,698 @@
 <!doctype html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Creative Archive</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-      :root {
-        --bg-color: #0a0a0b;
-        --card-bg: #111114;
-        --text-main: #f3f4f6;
-        --text-muted: #9ca3af;
-        --font-sans: 'Inter', sans-serif;
-      }
 
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Creative Archive</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #0a0a0b;
+      --card-bg: #111114;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --font-sans: 'Inter', sans-serif;
+    }
 
-      body {
-        background-color: var(--bg-color);
-        color: var(--text-main);
-        font-family: var(--font-sans);
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-      }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-      ::selection {
-        background-color: rgba(99, 102, 241, 0.3);
-        color: #c7d2fe;
-      }
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-      .background-effects {
-        position: fixed;
-        top: 0; left: 0; width: 100%; height: 100%;
-        pointer-events: none;
-        z-index: 0;
-        overflow: hidden;
-      }
+    ::selection {
+      background-color: rgba(99, 102, 241, 0.3);
+      color: #c7d2fe;
+    }
 
-      .bg-glow-1 {
-        position: absolute;
-        top: -10%; left: -10%;
-        width: 40%; height: 40%;
-        border-radius: 50%;
-        background: rgba(79, 70, 229, 0.1);
-        filter: blur(130px);
-      }
+    .background-effects {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
 
-      .bg-glow-2 {
-        position: absolute;
-        bottom: -10%; right: -10%;
-        width: 40%; height: 40%;
-        border-radius: 50%;
-        background: rgba(13, 148, 136, 0.1);
-        filter: blur(130px);
-      }
+    .bg-glow-1 {
+      position: absolute;
+      top: -10%;
+      left: -10%;
+      width: 40%;
+      height: 40%;
+      border-radius: 50%;
+      background: rgba(79, 70, 229, 0.1);
+      filter: blur(130px);
+    }
 
+    .bg-glow-2 {
+      position: absolute;
+      bottom: -10%;
+      right: -10%;
+      width: 40%;
+      height: 40%;
+      border-radius: 50%;
+      background: rgba(13, 148, 136, 0.1);
+      filter: blur(130px);
+    }
+
+    .container {
+      position: relative;
+      z-index: 10;
+      max-width: 1800px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
       .container {
-        position: relative;
-        z-index: 10;
-        max-width: 1280px;
-        margin: 0 auto;
-        padding: 2rem 1.5rem;
-        width: 100%;
+        padding-top: 3rem;
+        padding-bottom: 3rem;
       }
-      @media (min-width: 768px) {
-        .container { padding-top: 3rem; padding-bottom: 3rem; }
-      }
+    }
 
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+      animation: fadeInDown 0.6s ease-out;
+    }
+
+    @media (min-width: 768px) {
       .header {
-        text-align: center;
-        margin-bottom: 2rem;
-        animation: fadeInDown 0.6s ease-out;
+        margin-bottom: 3rem;
       }
-      @media (min-width: 768px) {
-        .header { margin-bottom: 3rem; }
-      }
+    }
 
-      @keyframes fadeInDown {
-        from { opacity: 0; transform: translateY(-20px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-
-      .title {
-        font-size: 2.25rem;
-        font-weight: 800;
-        margin-bottom: 0.5rem;
-        letter-spacing: -0.025em;
-        line-height: 1.2;
-      }
-      @media (min-width: 768px) {
-        .title { font-size: 3rem; }
-      }
-      @media (min-width: 1024px) {
-        .title { font-size: 3.5rem; }
-      }
-
-      .title span {
-        background: linear-gradient(to right, #818cf8, #22d3ee);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        color: transparent;
-      }
-
-      .subtitle {
-        font-size: 1rem;
-        color: var(--text-muted);
-        max-width: 42rem;
-        margin: 0 auto;
-        line-height: 1.6;
-        font-weight: 500;
-      }
-      @media (min-width: 768px) {
-        .subtitle { font-size: 1.125rem; }
-      }
-
-      .grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-      }
-      @media (min-width: 768px) {
-        .grid {
-          grid-template-columns: repeat(2, 1fr);
-          gap: 1.5rem;
-        }
-      }
-      @media (min-width: 1024px) {
-        .grid { gap: 2rem; }
-      }
-
-      .card {
-        position: relative;
-        background-color: var(--card-bg);
-        border: 1px solid rgba(255,255,255,0.06);
-        border-radius: 1rem;
-        overflow: hidden;
-        text-decoration: none;
-        display: flex;
-        flex-direction: column;
-        transition: all 0.5s ease;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
-        animation: fadeInUp 0.6s ease-out backwards;
-      }
-
-      .card:hover {
-        border-color: rgba(255,255,255,0.15);
-        transform: translateY(-4px);
-        box-shadow: 0 25px 30px -12px rgba(0, 0, 0, 0.7), 0 0 20px rgba(79, 70, 229, 0.1);
-      }
-
-      .card-top-bar {
-        position: absolute;
-        top: 0; left: 0; right: 0;
-        height: 4px;
-        opacity: 0.8;
-        transition: opacity 0.3s ease;
-        z-index: 50;
-      }
-      .card:hover .card-top-bar {
-        opacity: 1;
-      }
-
-      .thumbnail-container {
-        position: relative;
-        width: 100%;
-        aspect-ratio: 16 / 9;
-        background-color: rgba(31, 41, 55, 0.4);
-        overflow: hidden;
-      }
-
-      .thumbnail-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: top;
+    @keyframes fadeInDown {
+      from {
         opacity: 0;
-        transform: scale(1.05);
-        transition: opacity 1s ease, transform 1s ease;
-        position: relative;
-        z-index: 10;
+        transform: translateY(-20px);
       }
 
-      .thumbnail-image.loaded {
+      to {
         opacity: 1;
-        transform: scale(1);
-      }
-
-      .thumbnail-placeholder {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background-color: rgba(17, 24, 39, 0.6);
-        z-index: 0;
-        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-      }
-
-      @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: .5; }
-      }
-
-      .thumbnail-gradient {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(to top, rgba(17, 17, 20, 0.95) 0%, rgba(17, 17, 20, 0.4) 60%, transparent 100%);
-        pointer-events: none;
-        z-index: 20;
-      }
-
-      .card-content {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        padding: 1.5rem;
-        z-index: 30;
-        pointer-events: none;
-      }
-      @media (min-width: 768px) {
-        .card-content { padding: 2rem; }
-      }
-
-      .card-content-inner {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: 1rem;
-        pointer-events: auto;
-      }
-
-      .card-text-wrapper {
-        transform: translateY(8px);
-        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-      }
-      .card:hover .card-text-wrapper {
         transform: translateY(0);
       }
+    }
 
-      .card-title-row {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        margin-bottom: 0.625rem;
+    .title {
+      font-size: 2.25rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+    }
+
+    @media (min-width: 768px) {
+      .title {
+        font-size: 3rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .title {
+        font-size: 3.5rem;
+      }
+    }
+
+    .title span {
+      background: linear-gradient(to right, #818cf8, #22d3ee);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 42rem;
+      margin: 0 auto;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    @media (min-width: 768px) {
+      .subtitle {
+        font-size: 1.125rem;
+      }
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+      }
+    }
+
+    .card {
+      position: relative;
+      background-color: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 1rem;
+      overflow: hidden;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.5s ease;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+      animation: fadeInUp 0.6s ease-out backwards;
+      container-type: inline-size;
+    }
+
+    .card:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-4px);
+      box-shadow: 0 25px 30px -12px rgba(0, 0, 0, 0.7), 0 0 20px rgba(79, 70, 229, 0.1);
+    }
+
+    .card-top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      opacity: 0.8;
+      transition: opacity 0.3s ease;
+      z-index: 50;
+    }
+
+    .card:hover .card-top-bar {
+      opacity: 1;
+    }
+
+    .thumbnail-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background-color: rgba(31, 41, 55, 0.4);
+      overflow: hidden;
+    }
+
+    .thumbnail-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      opacity: 0;
+      transform: scale(1.05);
+      transition: opacity 1s ease, transform 1s ease;
+      position: relative;
+      z-index: 10;
+    }
+
+    .thumbnail-image.loaded {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .thumbnail-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(17, 24, 39, 0.6);
+      z-index: 0;
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
       }
 
-      .card-icon {
-        width: 36px;
-        height: 36px;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
+      50% {
+        opacity: .5;
+      }
+    }
+
+    .thumbnail-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(17, 17, 20, 0.95) 0%, rgba(17, 17, 20, 0.4) 60%, transparent 100%);
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    .card-content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      z-index: 30;
+      pointer-events: none;
+    }
+
+    @media (min-width: 768px) {
+      .card-content {
+        padding: 2rem;
+      }
+    }
+
+    .card-content-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 1rem;
+      pointer-events: auto;
+    }
+
+    .card-text-wrapper {
+      transform: translateY(8px);
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .card:hover .card-text-wrapper {
+      transform: translateY(0);
+    }
+
+    .card-title-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.625rem;
+    }
+
+    .card-icon {
+      width: clamp(28px, 10cqi, 36px);
+      height: clamp(28px, 10cqi, 36px);
+      border-radius: clamp(6px, 2.5cqi, 10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-title {
+      font-size: clamp(0.95rem, 5cqi, 1.35rem);
+      font-weight: 700;
+      color: #f3f4f6;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      transition: color 0.3s ease;
+      word-break: keep-all;
+    }
+
+    .card:hover .card-title {
+      color: white;
+    }
+
+    .card-description {
+      font-size: clamp(0.75rem, 3.5cqi, 0.95rem);
+      color: #d1d5db;
+      font-weight: 500;
+      opacity: 0.9;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      word-break: keep-all;
+    }
+
+    .card-link-icon-wrapper {
+      flex-shrink: 0;
+      margin-bottom: 0.125rem;
+    }
+
+    .card-link-icon {
+      width: clamp(32px, 11cqi, 40px);
+      height: clamp(32px, 11cqi, 40px);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      backdrop-filter: blur(8px);
+      transition: all 0.3s ease;
+    }
+
+    .card:hover .card-link-icon {
+      background: white;
+      color: #111827;
+      transform: scale(1.1);
+    }
+
+    .footer {
+      text-align: center;
+      padding-bottom: 2.5rem;
+      font-size: 0.75rem;
+      color: #4b5563;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      animation: fadeIn 1s ease-out 0.8s backwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
       }
 
-      .card-title {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: #f3f4f6;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-        transition: color 0.3s ease;
+      to {
+        opacity: 1;
       }
-      .card:hover .card-title {
-        color: white;
-      }
-      @media (min-width: 768px) {
-        .card-title { font-size: 1.5rem; }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.96);
       }
 
-      .card-description {
-        font-size: 0.875rem;
-        color: #d1d5db;
-        font-weight: 500;
-        opacity: 0.9;
-        text-shadow: 0 1px 2px rgba(0,0,0,0.8);
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
       }
-      @media (min-width: 768px) {
-        .card-description { font-size: 1rem; }
-      }
+    }
 
-      .card-link-icon-wrapper {
-        flex-shrink: 0;
-        margin-top: 0.25rem;
-      }
+    .icon-svg {
+      width: clamp(14px, 5.5cqi, 20px);
+      height: clamp(14px, 5.5cqi, 20px);
+      stroke: currentColor;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
 
-      .card-link-icon {
-        width: 40px; height: 40px;
-        border-radius: 50%;
-        background: rgba(255,255,255,0.1);
-        border: 1px solid rgba(255,255,255,0.2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        backdrop-filter: blur(8px);
-        transition: all 0.3s ease;
-      }
-      .card:hover .card-link-icon {
-        background: white;
-        color: #111827;
-        transform: scale(1.1);
-      }
+    .card-link-icon svg {
+      width: clamp(12px, 4.5cqi, 16px) !important;
+      height: clamp(12px, 4.5cqi, 16px) !important;
+    }
+  </style>
+</head>
 
-      .footer {
-        text-align: center;
-        padding-bottom: 2.5rem;
-        font-size: 0.75rem;
-        color: #4b5563;
-        font-weight: 500;
-        letter-spacing: 0.05em;
-        animation: fadeIn 1s ease-out 0.8s backwards;
-      }
+<body>
+  <div class="background-effects">
+    <div class="bg-glow-1"></div>
+    <div class="bg-glow-2"></div>
+  </div>
 
-      @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-      }
+  <div class="container">
+    <header class="header">
 
-      @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(20px) scale(0.96); }
-        to { opacity: 1; transform: translateY(0) scale(1); }
-      }
+      <h1 class="title">AI Creative <span>Archive</span></h1>
+      <p class="subtitle">
+        UI/UX팀이 AI를 활용해 제작한 다양한 창작 결과물과 실험 사례 저장소
+      </p>
+    </header>
 
-      .icon-svg {
-        width: 18px;
-        height: 18px;
-        stroke: currentColor;
-        stroke-width: 2.5;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        fill: none;
-      }
-      @media (min-width: 768px) {
-        .icon-svg { width: 20px; height: 20px; }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="background-effects">
-      <div class="bg-glow-1"></div>
-      <div class="bg-glow-2"></div>
-    </div>
-
-    <div class="container">
-      <header class="header">
-        
-        <h1 class="title">AI Creative  <span>Archive</span></h1>
-        <p class="subtitle">
-          UI/UX팀이 AI를 활용해 제작한 다양한 창작 결과물과 실험 사례 저장소
-        </p>
-      </header>
-
-      <main class="grid" id="services-grid">
-        <!-- Card 1 -->
-        <a class="card" href="https://stn-widget-dashboard-pro.vercel.app/" target="_blank" rel="noopener noreferrer" style="animation-delay: 0.1s">
-          <div class="card-top-bar" style="background: linear-gradient(to right, #3b82f6, #22d3ee)"></div>
-          <div class="thumbnail-container">
-            <div class="thumbnail-placeholder">
-              <svg class="icon-svg" style="color: #4b5563; width: 32px; height: 32px; margin-bottom: 12px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-              <span style="font-size: 0.75rem; color: #6b7280; font-weight: 500;">Capturing preview...</span>
-            </div>
-            <img src="images/widget.png" class="thumbnail-image" alt="Screenshot of 위젯 대시보드" onload="this.classList.add('loaded')" onerror="this.onerror=null; this.previousElementSibling.innerHTML='<svg class=\'icon-svg\' style=\'color: #4b5563; width: 32px; height: 32px; margin-bottom: 12px;\' viewBox=\'0 0 24 24\'><path d=\'m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z\'/><line x1=\'12\' y1=\'9\' x2=\'12\' y2=\'13\'/><line x1=\'12\' y1=\'17\' x2=\'12.01\' y2=\'17\'/></svg><span style=\'font-size: 0.75rem; color: #6b7280; font-weight: 500;\'>Preview unavailable</span>';">
-            <div class="thumbnail-gradient"></div>
+    <main class="grid" id="services-grid">
+      <!-- Card 1 -->
+      <a class="card" href="https://stn-widget-dashboard-pro.vercel.app/" target="_blank" rel="noopener noreferrer"
+        style="animation-delay: 0.1s">
+        <div class="card-top-bar" style="background: linear-gradient(to right, #3b82f6, #22d3ee)"></div>
+        <div class="thumbnail-container">
+          <div class="thumbnail-placeholder">
+            <svg class="icon-svg" style="color: #4b5563; width: 32px; height: 32px; margin-bottom: 12px;"
+              viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+            </svg>
+            <span style="font-size: 0.75rem; color: #6b7280; font-weight: 500;">Capturing preview...</span>
           </div>
-          <div class="card-content">
-            <div class="card-content-inner">
-              <div class="card-text-wrapper">
-                <div class="card-title-row">
-                  <div class="card-icon" style="background: linear-gradient(to right, #3b82f6, #22d3ee)">
-                    <svg class="icon-svg" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-                  </div>
-                  <h2 class="card-title">위젯 대시보드</h2>
+          <img src="images/widget.png" class="thumbnail-image" alt="Screenshot of 위젯 대시보드"
+            onload="this.classList.add('loaded')"
+            onerror="this.onerror=null; this.previousElementSibling.innerHTML='<svg class=\'icon-svg\' style=\'color: #4b5563; width: 32px; height: 32px; margin-bottom: 12px;\' viewBox=\'0 0 24 24\'><path d=\'m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z\'/><line x1=\'12\' y1=\'9\' x2=\'12\' y2=\'13\'/><line x1=\'12\' y1=\'17\' x2=\'12.01\' y2=\'17\'/></svg><span style=\'font-size: 0.75rem; color: #6b7280; font-weight: 500;\'>Preview unavailable</span>';">
+          <div class="thumbnail-gradient"></div>
+        </div>
+        <div class="card-content">
+          <div class="card-content-inner">
+            <div class="card-text-wrapper">
+              <div class="card-title-row">
+                <div class="card-icon" style="background: linear-gradient(to right, #3b82f6, #22d3ee)">
+                  <svg class="icon-svg" viewBox="0 0 24 24">
+                    <rect width="18" height="18" x="3" y="3" rx="2" />
+                    <path d="M3 9h18" />
+                    <path d="M9 21V9" />
+                  </svg>
                 </div>
-                <p class="card-description">위젯 사용자 커스텀 기능 제공</p>
+                <h2 class="card-title">위젯 대시보드</h2>
               </div>
-              <div class="card-link-icon-wrapper">
-                <div class="card-link-icon">
-                  <svg style="width: 16px; height: 16px; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; fill: none;" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                </div>
+              <p class="card-description">위젯 사용자 커스텀 기능 제공</p>
+            </div>
+            <div class="card-link-icon-wrapper">
+              <div class="card-link-icon">
+                <svg
+                  style="width: 16px; height: 16px; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; fill: none;"
+                  viewBox="0 0 24 24">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
               </div>
             </div>
           </div>
-        </a>
+        </div>
+      </a>
 
-        <!-- Card 2 -->
-        <a class="card" href="https://arc-v-room.vercel.app/" target="_blank" rel="noopener noreferrer" style="animation-delay: 0.2s">
-          <div class="card-top-bar" style="background: linear-gradient(to right, #10b981, #2dd4bf)"></div>
-          <div class="thumbnail-container">
-            <div class="thumbnail-placeholder">
-              <svg class="icon-svg" style="color: #4b5563; width: 32px; height: 32px; margin-bottom: 12px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-              <span style="font-size: 0.75rem; color: #6b7280; font-weight: 500;">Capturing preview...</span>
-            </div>
-            <img src="images/arc_v_room.png" class="thumbnail-image" alt="Screenshot of 3D 공간 제작" onload="this.classList.add('loaded')" onerror="this.onerror=null; this.previousElementSibling.innerHTML='<svg class=\'icon-svg\' style=\'color: #4b5563; width: 32px; height: 32px; margin-bottom: 12px;\' viewBox=\'0 0 24 24\'><path d=\'m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z\'/><line x1=\'12\' y1=\'9\' x2=\'12\' y2=\'13\'/><line x1=\'12\' y1=\'17\' x2=\'12.01\' y2=\'17\'/></svg><span style=\'font-size: 0.75rem; color: #6b7280; font-weight: 500;\'>Preview unavailable</span>';">
-            <div class="thumbnail-gradient"></div>
+      <!-- Card 2 -->
+      <a class="card" href="https://arc-v-room.vercel.app/" target="_blank" rel="noopener noreferrer"
+        style="animation-delay: 0.2s">
+        <div class="card-top-bar" style="background: linear-gradient(to right, #10b981, #2dd4bf)"></div>
+        <div class="thumbnail-container">
+          <div class="thumbnail-placeholder">
+            <svg class="icon-svg" style="color: #4b5563; width: 32px; height: 32px; margin-bottom: 12px;"
+              viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+            </svg>
+            <span style="font-size: 0.75rem; color: #6b7280; font-weight: 500;">Capturing preview...</span>
           </div>
-          <div class="card-content">
-            <div class="card-content-inner">
-              <div class="card-text-wrapper">
-                <div class="card-title-row">
-                  <div class="card-icon" style="background: linear-gradient(to right, #10b981, #2dd4bf)">
-                    <svg class="icon-svg" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.29 7 12 12 20.71 7"/><line x1="12" y1="22" x2="12" y2="12"/></svg>
-                  </div>
-                  <h2 class="card-title">3D 공간 제작</h2>
+          <img src="images/arc_v_room.png" class="thumbnail-image" alt="Screenshot of 3D 공간 제작"
+            onload="this.classList.add('loaded')"
+            onerror="this.onerror=null; this.previousElementSibling.innerHTML='<svg class=\'icon-svg\' style=\'color: #4b5563; width: 32px; height: 32px; margin-bottom: 12px;\' viewBox=\'0 0 24 24\'><path d=\'m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z\'/><line x1=\'12\' y1=\'9\' x2=\'12\' y2=\'13\'/><line x1=\'12\' y1=\'17\' x2=\'12.01\' y2=\'17\'/></svg><span style=\'font-size: 0.75rem; color: #6b7280; font-weight: 500;\'>Preview unavailable</span>';">
+          <div class="thumbnail-gradient"></div>
+        </div>
+        <div class="card-content">
+          <div class="card-content-inner">
+            <div class="card-text-wrapper">
+              <div class="card-title-row">
+                <div class="card-icon" style="background: linear-gradient(to right, #10b981, #2dd4bf)">
+                  <svg class="icon-svg" viewBox="0 0 24 24">
+                    <path
+                      d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                    <polyline points="3.29 7 12 12 20.71 7" />
+                    <line x1="12" y1="22" x2="12" y2="12" />
+                  </svg>
                 </div>
-                <p class="card-description">평면도 재가공, 3D공간 모델링 도구</p>
+                <h2 class="card-title">3D 공간 제작</h2>
               </div>
-              <div class="card-link-icon-wrapper">
-                <div class="card-link-icon">
-                  <svg style="width: 16px; height: 16px; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; fill: none;" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                </div>
+              <p class="card-description">평면도 재가공, 3D공간 모델링 도구</p>
+            </div>
+            <div class="card-link-icon-wrapper">
+              <div class="card-link-icon">
+                <svg
+                  style="width: 16px; height: 16px; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; fill: none;"
+                  viewBox="0 0 24 24">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
               </div>
             </div>
           </div>
-        </a>
+        </div>
+      </a>
 
-        <!-- Card 3 -->
-        <a class="card" href="https://server-room-3d.vercel.app/" target="_blank" rel="noopener noreferrer" style="animation-delay: 0.3s">
-          <div class="card-top-bar" style="background: linear-gradient(to right, #a855f7, #818cf8)"></div>
-          <div class="thumbnail-container">
-            <div class="thumbnail-placeholder">
-              <svg class="icon-svg" style="color: #4b5563; width: 32px; height: 32px; margin-bottom: 12px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-              <span style="font-size: 0.75rem; color: #6b7280; font-weight: 500;">Capturing preview...</span>
-            </div>
-            <img src="images/srms3d.png" class="thumbnail-image" alt="Screenshot of 3D 상면관리" onload="this.classList.add('loaded')" onerror="this.onerror=null; this.previousElementSibling.innerHTML='<svg class=\'icon-svg\' style=\'color: #4b5563; width: 32px; height: 32px; margin-bottom: 12px;\' viewBox=\'0 0 24 24\'><path d=\'m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z\'/><line x1=\'12\' y1=\'9\' x2=\'12\' y2=\'13\'/><line x1=\'12\' y1=\'17\' x2=\'12.01\' y2=\'17\'/></svg><span style=\'font-size: 0.75rem; color: #6b7280; font-weight: 500;\'>Preview unavailable</span>';">
-            <div class="thumbnail-gradient"></div>
+      <!-- Card 3 -->
+      <a class="card" href="https://server-room-3d.vercel.app/" target="_blank" rel="noopener noreferrer"
+        style="animation-delay: 0.3s">
+        <div class="card-top-bar" style="background: linear-gradient(to right, #a855f7, #818cf8)"></div>
+        <div class="thumbnail-container">
+          <div class="thumbnail-placeholder">
+            <svg class="icon-svg" style="color: #4b5563; width: 32px; height: 32px; margin-bottom: 12px;"
+              viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+            </svg>
+            <span style="font-size: 0.75rem; color: #6b7280; font-weight: 500;">Capturing preview...</span>
           </div>
-          <div class="card-content">
-            <div class="card-content-inner">
-              <div class="card-text-wrapper">
-                <div class="card-title-row">
-                  <div class="card-icon" style="background: linear-gradient(to right, #a855f7, #818cf8)">
-                    <svg class="icon-svg" viewBox="0 0 24 24"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
-                  </div>
-                  <h2 class="card-title">3D 상면관리</h2>
+          <img src="images/srms3d.png" class="thumbnail-image" alt="Screenshot of 3D 상면관리"
+            onload="this.classList.add('loaded')"
+            onerror="this.onerror=null; this.previousElementSibling.innerHTML='<svg class=\'icon-svg\' style=\'color: #4b5563; width: 32px; height: 32px; margin-bottom: 12px;\' viewBox=\'0 0 24 24\'><path d=\'m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z\'/><line x1=\'12\' y1=\'9\' x2=\'12\' y2=\'13\'/><line x1=\'12\' y1=\'17\' x2=\'12.01\' y2=\'17\'/></svg><span style=\'font-size: 0.75rem; color: #6b7280; font-weight: 500;\'>Preview unavailable</span>';">
+          <div class="thumbnail-gradient"></div>
+        </div>
+        <div class="card-content">
+          <div class="card-content-inner">
+            <div class="card-text-wrapper">
+              <div class="card-title-row">
+                <div class="card-icon" style="background: linear-gradient(to right, #a855f7, #818cf8)">
+                  <svg class="icon-svg" viewBox="0 0 24 24">
+                    <rect width="20" height="8" x="2" y="2" rx="2" ry="2" />
+                    <rect width="20" height="8" x="2" y="14" rx="2" ry="2" />
+                    <line x1="6" y1="6" x2="6.01" y2="6" />
+                    <line x1="6" y1="18" x2="6.01" y2="18" />
+                  </svg>
                 </div>
-                <p class="card-description">3D상면관리 및 모니터링 서비스</p>
+                <h2 class="card-title">3D 상면관리</h2>
               </div>
-              <div class="card-link-icon-wrapper">
-                <div class="card-link-icon">
-                  <svg style="width: 16px; height: 16px; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; fill: none;" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                </div>
+              <p class="card-description">3D상면관리 및 모니터링 서비스</p>
+            </div>
+            <div class="card-link-icon-wrapper">
+              <div class="card-link-icon">
+                <svg
+                  style="width: 16px; height: 16px; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; fill: none;"
+                  viewBox="0 0 24 24">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
               </div>
             </div>
           </div>
-        </a>
+        </div>
+      </a>
 
-        <!-- Card 4 -->
-        <a class="card" href="https://simple3d.vercel.app/" target="_blank" rel="noopener noreferrer" style="animation-delay: 0.4s">
-          <div class="card-top-bar" style="background: linear-gradient(to right, #f97316, #f87171)"></div>
-          <div class="thumbnail-container">
-            <div class="thumbnail-placeholder">
-              <svg class="icon-svg" style="color: #4b5563; width: 32px; height: 32px; margin-bottom: 12px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-              <span style="font-size: 0.75rem; color: #6b7280; font-weight: 500;">Capturing preview...</span>
-            </div>
-            <img src="images/simple3d.png" class="thumbnail-image" alt="Screenshot of 심플 3D 관제" onload="this.classList.add('loaded')" onerror="this.onerror=null; this.previousElementSibling.innerHTML='<svg class=\'icon-svg\' style=\'color: #4b5563; width: 32px; height: 32px; margin-bottom: 12px;\' viewBox=\'0 0 24 24\'><path d=\'m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z\'/><line x1=\'12\' y1=\'9\' x2=\'12\' y2=\'13\'/><line x1=\'12\' y1=\'17\' x2=\'12.01\' y2=\'17\'/></svg><span style=\'font-size: 0.75rem; color: #6b7280; font-weight: 500;\'>Preview unavailable</span>';">
-            <div class="thumbnail-gradient"></div>
+      <!-- Card 4 -->
+      <a class="card" href="https://simple3d.vercel.app/" target="_blank" rel="noopener noreferrer"
+        style="animation-delay: 0.4s">
+        <div class="card-top-bar" style="background: linear-gradient(to right, #f97316, #f87171)"></div>
+        <div class="thumbnail-container">
+          <div class="thumbnail-placeholder">
+            <svg class="icon-svg" style="color: #4b5563; width: 32px; height: 32px; margin-bottom: 12px;"
+              viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+            </svg>
+            <span style="font-size: 0.75rem; color: #6b7280; font-weight: 500;">Capturing preview...</span>
           </div>
-          <div class="card-content">
-            <div class="card-content-inner">
-              <div class="card-text-wrapper">
-                <div class="card-title-row">
-                  <div class="card-icon" style="background: linear-gradient(to right, #f97316, #f87171)">
-                    <svg class="icon-svg" viewBox="0 0 24 24"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.48 12H2"/></svg>
-                  </div>
-                  <h2 class="card-title">심플 3D 관제</h2>
+          <img src="images/simple3d.png" class="thumbnail-image" alt="Screenshot of 심플 3D 관제"
+            onload="this.classList.add('loaded')"
+            onerror="this.onerror=null; this.previousElementSibling.innerHTML='<svg class=\'icon-svg\' style=\'color: #4b5563; width: 32px; height: 32px; margin-bottom: 12px;\' viewBox=\'0 0 24 24\'><path d=\'m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z\'/><line x1=\'12\' y1=\'9\' x2=\'12\' y2=\'13\'/><line x1=\'12\' y1=\'17\' x2=\'12.01\' y2=\'17\'/></svg><span style=\'font-size: 0.75rem; color: #6b7280; font-weight: 500;\'>Preview unavailable</span>';">
+          <div class="thumbnail-gradient"></div>
+        </div>
+        <div class="card-content">
+          <div class="card-content-inner">
+            <div class="card-text-wrapper">
+              <div class="card-title-row">
+                <div class="card-icon" style="background: linear-gradient(to right, #f97316, #f87171)">
+                  <svg class="icon-svg" viewBox="0 0 24 24">
+                    <path
+                      d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.48 12H2" />
+                  </svg>
                 </div>
-                <p class="card-description">구역별 온습도 3D 모니터링 서비스</p>
+                <h2 class="card-title">심플 3D 관제</h2>
               </div>
-              <div class="card-link-icon-wrapper">
-                <div class="card-link-icon">
-                  <svg style="width: 16px; height: 16px; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; fill: none;" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                </div>
+              <p class="card-description">구역별 온습도 3D 모니터링 서비스</p>
+            </div>
+            <div class="card-link-icon-wrapper">
+              <div class="card-link-icon">
+                <svg
+                  style="width: 16px; height: 16px; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; fill: none;"
+                  viewBox="0 0 24 24">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
               </div>
             </div>
           </div>
-        </a>
-      </main>
-    </div>
+        </div>
+      </a>
+      <!-- Card 5 -->
+      <a class="card" href="https://topology3d.vercel.app/" target="_blank" rel="noopener noreferrer"
+        style="animation-delay: 0.5s">
+        <div class="card-top-bar" style="background: linear-gradient(to right, #eab308, #facc15)"></div>
+        <div class="thumbnail-container">
+          <div class="thumbnail-placeholder">
+            <svg class="icon-svg" style="color: #4b5563; width: 32px; height: 32px; margin-bottom: 12px;"
+              viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+            </svg>
+            <span style="font-size: 0.75rem; color: #6b7280; font-weight: 500;">Capturing preview...</span>
+          </div>
+          <img src="images/topology3D.png" class="thumbnail-image" alt="Screenshot of 3D 토폴로지"
+            onload="this.classList.add('loaded')"
+            onerror="this.onerror=null; this.previousElementSibling.innerHTML='<svg class=\'icon-svg\' style=\'color: #4b5563; width: 32px; height: 32px; margin-bottom: 12px;\' viewBox=\'0 0 24 24\'><path d=\'m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z\'/><line x1=\'12\' y1=\'9\' x2=\'12\' y2=\'13\'/><line x1=\'12\' y1=\'17\' x2=\'12.01\' y2=\'17\'/></svg><span style=\'font-size: 0.75rem; color: #6b7280; font-weight: 500;\'>Preview unavailable</span>';">
+          <div class="thumbnail-gradient"></div>
+        </div>
+        <div class="card-content">
+          <div class="card-content-inner">
+            <div class="card-text-wrapper">
+              <div class="card-title-row">
+                <div class="card-icon" style="background: linear-gradient(to right, #eab308, #facc15)">
+                  <svg class="icon-svg" viewBox="0 0 24 24">
+                    <circle cx="12" cy="5" r="3" />
+                    <circle cx="5" cy="19" r="3" />
+                    <circle cx="19" cy="19" r="3" />
+                    <line x1="10.5" y1="7.5" x2="6.5" y2="16.5" />
+                    <line x1="13.5" y1="7.5" x2="17.5" y2="16.5" />
+                    <line x1="7.5" y1="19" x2="16.5" y2="19" />
+                  </svg>
+                </div>
+                <h2 class="card-title">3D 토폴로지</h2>
+              </div>
+              <p class="card-description">네트워크 기반 자동 3D 토폴로지 생성</p>
+            </div>
+            <div class="card-link-icon-wrapper">
+              <div class="card-link-icon">
+                <svg
+                  style="width: 16px; height: 16px; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; fill: none;"
+                  viewBox="0 0 24 24">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </main>
+  </div>
 
-    <!--<footer class="footer">
+  <!--<footer class="footer">
       COPYRIGHT © <span id="year"></span> 3D SERVICE PORTAL. ALL RIGHTS RESERVED.
     </footer>-->
 
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const yearElement = document.getElementById('year');
-        if (yearElement) {
-          yearElement.textContent = new Date().getFullYear();
-        }
-      });
-    </script>
-  </body>
-</html>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const yearElement = document.getElementById('year');
+      if (yearElement) {
+        yearElement.textContent = new Date().getFullYear();
+      }
+    });
+  </script>
+</body>
 
+</html>

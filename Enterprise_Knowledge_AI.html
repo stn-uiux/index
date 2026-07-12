@@ -1,0 +1,1888 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기업형 지식관리 AI 시스템 - 사용자 흐름 및 아키텍처 마스터 플랜</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+        }
+
+        .slide-pane {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Custom scrollbar for high legibility */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 6px;
+            border: 2px solid #0f172a;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        /* LIVE FIBER-OPTIC PATH ANIMATIONS */
+        @keyframes strokeFlow {
+            to {
+                stroke-dashoffset: -14;
+            }
+        }
+
+        .flow-line {
+            stroke-dasharray: 8, 6;
+            animation: strokeFlow 0.8s linear infinite;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col overflow-hidden">
+
+    <!-- Top Navigation Bar -->
+    <header class="bg-slate-900 border-b border-slate-800 px-8 py-5 flex justify-between items-center z-10 shadow-md">
+        <div class="flex items-center gap-4">
+            <span class="bg-blue-600 text-white p-2.5 rounded-xl font-bold text-2xl shadow-lg shadow-blue-500/20"><i
+                    class="fa-solid fa-brain"></i></span>
+            <div>
+                <h1 class="text-2xl font-black text-slate-100 tracking-tight flex items-center gap-3">
+                    기업형 지식관리 AI <span
+                        class="text-sm bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full font-mono border border-blue-500/20 font-bold">V2.0
+                        PRO</span>
+                </h1>
+                <p class="text-sm text-slate-400 font-medium">서비스 기획 사용자 흐름 & 통합 아키텍처 마스터 슬라이드</p>
+            </div>
+        </div>
+
+        <!-- Tab Slide Navigation -->
+        <div class="flex items-center gap-4">
+            <div class="flex bg-slate-950 rounded-2xl p-2 text-base border border-slate-800 shadow-inner">
+                <button onclick="changeSlide(1)"
+                    class="slide-tab px-5 py-2.5 rounded-xl font-bold transition-all bg-blue-600 text-white"
+                    id="tab-1">표지</button>
+                <button onclick="changeSlide(2)"
+                    class="slide-tab px-5 py-2.5 rounded-xl font-bold transition-all text-slate-400 hover:text-slate-200"
+                    id="tab-2">통합 아키텍처</button>
+                <button onclick="changeSlide(3)"
+                    class="slide-tab px-5 py-2.5 rounded-xl font-bold transition-all text-slate-400 hover:text-slate-200"
+                    id="tab-3">코드 가이드</button>
+                <button onclick="changeSlide(4)"
+                    class="slide-tab px-5 py-2.5 rounded-xl font-bold transition-all text-slate-400 hover:text-slate-200"
+                    id="tab-4">상세 시나리오</button>
+                <button onclick="changeSlide(5)"
+                    class="slide-tab px-5 py-2.5 rounded-xl font-bold transition-all text-slate-400 hover:text-slate-200"
+                    id="tab-5">기능/메뉴 보드</button>
+                <button onclick="changeSlide(6)"
+                    class="slide-tab px-5 py-2.5 rounded-xl font-bold transition-all text-slate-400 hover:text-slate-200"
+                    id="tab-6">제안 전략</button>
+            </div>
+
+            <a href="기업형 지식관리 AI 시스템.xlsx" download
+                class="bg-emerald-600 hover:bg-emerald-500 border border-emerald-500 px-4 py-3 rounded-xl text-white transition-colors shadow-md flex items-center gap-2 font-bold text-sm"
+                title="설계가이드 및 기능명세서 엑셀 다운로드">
+                <i class="fa-solid fa-file-excel text-lg"></i> <span class="hidden 2xl:inline">엑셀 다운</span>
+            </a>
+
+            <button onclick="toggleFullScreen()"
+                class="bg-slate-800 hover:bg-slate-700 border border-slate-700 p-3 rounded-xl text-slate-300 transition-colors shadow-md"
+                title="전체화면 모드">
+                <i class="fa-solid fa-expand text-lg"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main
+        class="flex-1 relative overflow-hidden flex justify-center items-center p-8 bg-gradient-to-b from-slate-900 to-slate-950">
+
+        <!-- ==================== SLIDE 1: COVER ==================== -->
+        <section id="slide-1"
+            class="slide-pane absolute inset-0 flex flex-col justify-center items-center p-12 transition-all duration-400 transform translate-x-0 opacity-100">
+            <div class="max-w-5xl text-center space-y-8">
+                <div
+                    class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-base font-bold tracking-wide">
+                    <span class="flex h-3 w-3 relative">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
+                    </span>
+                    RESTACKED BLUEPRINT PRESENTATION
+                </div>
+                <h2
+                    class="text-6xl md:text-7xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-100 to-blue-400 bg-clip-text text-transparent leading-tight">
+                    기업형 지식관리 AI 시스템<br>사용자 흐름 및 통합 아키텍처
+                </h2>
+                <p class="text-xl md:text-2xl text-slate-300 max-w-4xl mx-auto font-normal leading-relaxed">
+                    대시보드, 스마트 저장소, 매뉴얼 역발행, 전사 공통 플로팅 AI 위젯,<br>관리 권한 및 보안 거버넌스 연동 스키마 통합 가이드
+                </p>
+                <div class="pt-8 flex justify-center gap-4">
+                    <button onclick="changeSlide(2)"
+                        class="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold text-lg rounded-2xl shadow-xl shadow-blue-500/20 hover:shadow-blue-500/30 transition-all flex items-center gap-3">
+                        통합 아키텍처 맵 보기 <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="absolute bottom-12 text-center text-base text-slate-500 font-semibold">
+                ⓒ 2026 Enterprise Knowledge AI System Planning. All Rights Reserved.
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 2: INTEGRATED ARCHITECTURE ==================== -->
+        <section id="slide-2"
+            class="slide-pane absolute inset-0 flex flex-col p-8 transition-all duration-400 transform translate-x-full opacity-0 overflow-y-auto">
+            <!-- Header inside slide -->
+            <div class="flex justify-between items-center mb-6 border-b border-slate-800 pb-5">
+                <div>
+                    <span class="text-sm font-bold text-blue-400 tracking-wider uppercase">ARCHITECTURAL MAP (USER-FLOW
+                        SYNCED)</span>
+                    <h3 class="text-3xl font-extrabold text-white">모듈 반응형 사용자 흐름 시스템 아키텍처</h3>
+                    <p class="text-base text-slate-400 mt-1">상단의 라이선스 모듈 스위치를 On/Off 하여, 모듈 구성에 따른 아키텍처 변화를 시뮬레이션해 보세요.
+                    </p>
+                </div>
+
+                <!-- Interactive Feature Toggles -->
+                <div
+                    class="bg-slate-950 p-4 rounded-2xl border border-slate-800 flex flex-wrap gap-6 items-center shadow-lg z-20 relative shadow-blue-950/20">
+                    <div class="text-sm font-bold text-slate-400 mr-1"><i
+                            class="fa-solid fa-sliders text-blue-500 mr-2"></i> 라이선스 제어:</div>
+
+                    <!-- Preset Group Toggles -->
+                    <div class="flex items-center bg-slate-900 rounded-xl p-1 mr-2 border border-slate-800">
+                        <button onclick="applyLicense('trial')" data-tier="trial"
+                            class="license-preset-btn px-3 py-1.5 text-xs font-bold rounded-lg transition-colors text-slate-400 hover:bg-slate-800">체험판</button>
+                        <button onclick="applyLicense('basic')" data-tier="basic"
+                            class="license-preset-btn px-3 py-1.5 text-xs font-bold rounded-lg transition-colors text-slate-400 hover:bg-slate-800">보급형</button>
+                        <button onclick="applyLicense('integrated')" data-tier="integrated"
+                            class="license-preset-btn px-3 py-1.5 text-xs font-bold rounded-lg transition-colors text-slate-400 hover:bg-slate-800">통합형</button>
+                        <button onclick="applyLicense('full')" data-tier="full"
+                            class="license-preset-btn px-3 py-1.5 text-xs font-bold rounded-lg transition-colors bg-blue-600 text-white">풀패키지</button>
+                    </div>
+
+                    <div class="w-px h-6 bg-slate-800 mx-1 hidden 2xl:block"></div>
+
+                    <label class="flex items-center gap-3 cursor-pointer">
+                        <span class="text-sm font-bold text-slate-300">데이터 커넥터 (A)</span>
+                        <div class="relative">
+                            <input type="checkbox" id="toggle-modA" checked class="sr-only peer"
+                                onchange="updateInteractiveMap()">
+                            <div
+                                class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[7px] after:bg-slate-300 after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-lime-600">
+                            </div>
+                        </div>
+                    </label>
+
+                    <label class="flex items-center gap-3 cursor-pointer">
+                        <span class="text-sm font-bold text-slate-300">매뉴얼 빌더 (B)</span>
+                        <div class="relative">
+                            <input type="checkbox" id="toggle-modB" checked class="sr-only peer"
+                                onchange="updateInteractiveMap()">
+                            <div
+                                class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[7px] after:bg-slate-300 after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-teal-600">
+                            </div>
+                        </div>
+                    </label>
+
+                    <label class="flex items-center gap-3 cursor-pointer">
+                        <span class="text-sm font-bold text-slate-300">보안 거버넌스 (C)</span>
+                        <div class="relative">
+                            <input type="checkbox" id="toggle-modC" checked class="sr-only peer"
+                                onchange="updateInteractiveMap()">
+                            <div
+                                class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[7px] after:bg-slate-300 after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-purple-600">
+                            </div>
+                        </div>
+                    </label>
+
+                    <label class="flex items-center gap-3 cursor-pointer">
+                        <span class="text-sm font-bold text-slate-300">업무 자동화 (D)</span>
+                        <div class="relative">
+                            <input type="checkbox" id="toggle-modD" checked class="sr-only peer"
+                                onchange="updateInteractiveMap()">
+                            <div
+                                class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[7px] after:bg-slate-300 after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-600">
+                            </div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Architecture Schema Base Canvas -->
+            <div id="arch-canvas" class="flex-1 relative min-h-0 w-full mb-2">
+                <!-- SVG Canvas Container (Behind cards) -->
+                <svg id="flow-svg-canvas" class="absolute inset-0 w-full h-full pointer-events-none"
+                    style="z-index: 1;"></svg>
+
+                <!-- HTML Labels Container (Above everything) -->
+                <div id="flow-labels-container" class="absolute inset-0 pointer-events-none" style="z-index: 30;"></div>
+
+                <!-- Foreground Grid Layout for Node Cards -->
+                <div class="absolute inset-0 grid grid-cols-[320px_320px_320px_400px] justify-between items-stretch pointer-events-none"
+                    style="z-index: 10;">
+
+                    <!-- Left Workspace Flow (Span 3 columns) -->
+                    <div class="col-span-3 flex flex-col justify-between h-full pointer-events-auto">
+
+                        <!-- START Indicator -->
+                        <div id="btn-start"
+                            class="flex items-center justify-center gap-3 bg-slate-900 p-2.5 rounded-xl border-2 border-emerald-500 shadow-lg shadow-emerald-950/20 mr-auto w-[320px]">
+                            <div
+                                class="bg-emerald-500/20 text-emerald-400 px-2.5 py-1 rounded-lg text-[14px] font-black flex items-center gap-1.5 border border-emerald-500/30 whitespace-nowrap">
+                                <i class="fa-solid fa-right-to-bracket animate-pulse"></i> START
+                            </div>
+                            <p class="text-[16px] text-slate-200 font-extrabold leading-none whitespace-nowrap">임직원 사내
+                                포털 로그인</p>
+                        </div>
+
+                        <!-- Core User Modules Row -->
+                        <div class="grid grid-cols-[repeat(3,320px)] justify-between w-full">
+
+                            <!-- M1. Portal Home -->
+                            <div id="card-m1"
+                                class="bg-slate-900 p-3.5 rounded-xl border-2 border-blue-600 relative transition-all duration-300 hover:border-blue-400 shadow-lg shadow-blue-500/10 flex flex-col justify-between">
+                                <div>
+                                    <div class="flex justify-between items-start mb-1">
+                                        <h4
+                                            class="font-bold text-[18px] text-white leading-tight flex items-center gap-2">
+                                            <i class="fa-solid fa-house-user text-blue-500 text-[20px]"></i> M1. 홈 대시보드
+                                        </h4>
+                                        <span
+                                            class="bg-blue-600 text-white text-[12px] font-bold px-2 py-0.5 rounded-full mt-0.5">CORE</span>
+                                    </div>
+                                    <span
+                                        class="text-[12px] bg-blue-500/20 text-blue-400 font-extrabold px-2 py-0.5 rounded border border-blue-500/10 font-mono mt-1 inline-block">FN-PTL-001</span>
+                                </div>
+                                <p class="text-[15px] text-slate-400 mt-1.5 leading-snug font-normal">포털 메인 대시보드 및 공지사항
+                                </p>
+                            </div>
+
+                            <!-- M2. Knowledge Store -->
+                            <div id="card-m2"
+                                class="bg-slate-900 p-3.5 rounded-xl border-2 border-blue-600 relative transition-all duration-300 hover:border-blue-400 shadow-lg shadow-blue-500/10 flex flex-col justify-between">
+                                <div>
+                                    <div class="flex justify-between items-start mb-1">
+                                        <h4
+                                            class="font-bold text-[18px] text-white leading-tight flex items-center gap-2">
+                                            <i class="fa-solid fa-folder-tree text-blue-500 text-[20px]"></i> M2. 지식 저장소
+                                        </h4>
+                                        <span
+                                            class="bg-blue-600 text-white text-[12px] font-bold px-2 py-0.5 rounded-full mt-0.5">CORE</span>
+                                    </div>
+                                    <div class="flex gap-1 mt-1">
+                                        <span
+                                            class="text-[12px] bg-blue-500/20 text-blue-400 font-extrabold px-2 py-0.5 rounded border border-blue-500/10 font-mono">FN-STR-001</span>
+                                        <span
+                                            class="text-[12px] bg-blue-500/20 text-blue-400 font-extrabold px-2 py-0.5 rounded border border-blue-500/10 font-mono">002</span>
+                                    </div>
+                                </div>
+                                <p class="text-[15px] text-slate-400 mt-1.5 leading-snug font-normal">문서 구축, 무손실 파싱 및 태깅
+                                </p>
+                            </div>
+
+                            <!-- M3. Manual Builder -->
+                            <div id="card-m3"
+                                class="bg-slate-900 p-3.5 rounded-xl border-2 border-teal-600 relative transition-all duration-500 shadow-lg shadow-teal-500/10 flex flex-col justify-between">
+                                <div>
+                                    <div class="flex justify-between items-start mb-1">
+                                        <h4
+                                            class="font-extrabold text-[18px] text-teal-400 leading-tight flex items-center gap-2">
+                                            <i class="fa-solid fa-wand-magic-sparkles text-[20px]"></i>
+                                            M3. AI 매뉴얼 빌더
+                                        </h4>
+                                        <span
+                                            class="bg-teal-600 text-white text-[12px] font-bold px-2 py-0.5 rounded-full mt-0.5">모듈
+                                            B</span>
+                                    </div>
+                                    <span
+                                        class="text-[12px] bg-teal-500/20 text-teal-400 font-extrabold px-2 py-0.5 rounded border border-teal-500/10 font-mono mt-1 inline-block">FN-MNL-001</span>
+                                </div>
+                                <p class="text-[15px] text-slate-400 mt-1.5 leading-snug font-normal">가이드 생성 및 FAQ 자산화
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <!-- Mid Extensions Row -->
+                        <div class="grid grid-cols-[repeat(3,320px)] justify-between w-full">
+                            <!-- Module A -->
+                            <div id="card-modA"
+                                class="bg-slate-900 p-3 rounded-xl border-2 border-lime-500/30 relative transition-all duration-500 shadow-md flex flex-col justify-between">
+                                <div>
+                                    <div class="flex justify-between items-start mb-1">
+                                        <span
+                                            class="text-[18px] font-extrabold text-lime-400 flex items-center gap-1.5"><i
+                                                class="fa-solid fa-plug text-[17px]"></i> A2. 커넥터 관리</span>
+                                        <span
+                                            class="bg-lime-600 text-white text-[12px] font-bold px-2 py-0.5 rounded-full mt-0.5">모듈
+                                            A</span>
+                                    </div>
+                                    <span
+                                        class="text-[12px] bg-lime-500/20 text-lime-400 font-extrabold px-2 py-0.5 rounded border border-lime-500/10 font-mono mt-1 inline-block">FN-CON-001</span>
+                                </div>
+                                <p class="text-[15px] text-slate-400 mt-1.5 leading-snug font-normal">Drive, Slack,
+                                    Notion
+                                    실시간
+                                    동기화</p>
+                            </div>
+
+                            <!-- Module C (A5) -->
+                            <div id="card-modC"
+                                class="bg-slate-900 p-3 rounded-xl border-2 border-purple-500/30 relative transition-all duration-500 shadow-md flex flex-col justify-between">
+                                <div>
+                                    <div class="flex justify-between items-start mb-1">
+                                        <span
+                                            class="text-[18px] font-extrabold text-purple-400 flex items-center gap-1.5"><i
+                                                class="fa-solid fa-shield-halved text-[20px]"></i> A5. 보안 거버넌스</span>
+                                        <span
+                                            class="bg-purple-600 text-white text-[12px] font-bold px-2 py-0.5 rounded-full mt-0.5">모듈
+                                            C</span>
+                                    </div>
+                                    <span
+                                        class="text-[12px] bg-purple-500/20 text-purple-400 font-extrabold px-2 py-0.5 rounded border border-purple-500/10 font-mono mt-1 inline-block">FN-GOV-001</span>
+                                </div>
+                                <p class="text-[15px] text-slate-400 mt-1.5 leading-snug font-normal">외부 ACL 자동 동기화 및 동적
+                                    정책 엔진
+                                </p>
+                            </div>
+
+                            <!-- Core Security (A3) -->
+                            <div id="card-core-sec"
+                                class="bg-slate-900 p-3 rounded-xl border border-blue-500/30 relative transition-all duration-500 shadow-md flex flex-col justify-between">
+                                <div>
+                                    <div class="flex justify-between items-start mb-1">
+                                        <span class="text-[18px] font-bold text-white flex items-center gap-1.5"><i
+                                                class="fa-solid fa-lock text-blue-500 text-[20px]"></i> A3. 엔터프라이즈
+                                            보안</span>
+                                        <span
+                                            class="bg-blue-600 text-white text-[12px] font-bold px-2 py-0.5 rounded-full mt-0.5">CORE</span>
+                                    </div>
+                                    <span
+                                        class="text-[12px] bg-blue-500/20 text-blue-400 font-extrabold px-2 py-0.5 rounded border border-blue-500/10 font-mono mt-1 inline-block">FN-ADM-003,
+                                        004, 005</span>
+                                </div>
+                                <p class="text-[15px] text-slate-400 mt-1.5 leading-snug font-normal">기본 ACL 권한 관리, 마스킹,
+                                    감사 로그</p>
+                            </div>
+                        </div>
+
+                        <!-- Admin View Panel -->
+                        <div id="card-admin"
+                            class="bg-slate-900 p-3 rounded-xl border border-slate-800 shadow-inner mt-4 w-[710px]">
+                            <div class="flex flex-wrap items-center gap-2 border-b border-slate-800 pb-2 mb-2">
+                                <span class="text-[18px] font-extrabold text-slate-200 flex items-center gap-1.5"><i
+                                        class="fa-solid fa-users-gear text-[20px]"></i> A1. Admin View</span>
+                                <div class="flex gap-1 ml-auto">
+                                    <span
+                                        class="text-[12px] bg-slate-800/50 text-slate-300 font-extrabold px-2 py-0.5 rounded border border-slate-700 font-mono inline-block">FN-USR
+                                        001~003</span>
+                                    <span
+                                        class="text-[12px] bg-slate-800/50 text-slate-300 font-extrabold px-2 py-0.5 rounded border border-slate-700 font-mono inline-block">FN-ADM
+                                        001~005</span>
+                                    <span id="admin-security-text"
+                                        class="text-[12px] bg-slate-800/50 text-slate-300 font-extrabold px-2 py-0.5 rounded border border-slate-700 font-mono inline-block transition-opacity duration-300">FN-GOV-001</span>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-4 gap-2 text-[14px] text-slate-300 font-bold mt-3">
+                                <div class="flex items-center gap-1.5">
+                                    <i class="fa-solid fa-square-check text-blue-500 text-[14px]"></i>
+                                    기능 제어
+                                    <span
+                                        class="bg-blue-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full ml-1">CORE</span>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <i class="fa-solid fa-square-check text-blue-500 text-[14px]"></i>
+                                    조직도 동기화
+                                    <span
+                                        class="bg-blue-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full ml-1">CORE</span>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <i class="fa-solid fa-square-check text-blue-500 text-[14px]"></i>
+                                    보안 및 ACL
+                                    <span
+                                        class="bg-blue-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full ml-1">CORE</span>
+                                </div>
+                                <div id="admin-masking-audit"
+                                    class="flex items-center gap-1.5 transition-opacity duration-300">
+                                    <i class="fa-solid fa-square-check text-purple-500 text-[14px]"></i>
+                                    자동 거버넌스
+                                    <span
+                                        class="bg-purple-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full ml-1">모듈
+                                        C</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Right Unified Floating Widget -->
+                    <div id="card-w1"
+                        class="col-span-1 bg-slate-900 rounded-2xl border-2 border-blue-600 p-4 flex flex-col justify-between relative shadow-2xl shadow-blue-500/15 pointer-events-auto">
+                        <div
+                            class="absolute top-4 right-4 bg-blue-600 text-[13px] font-black px-2.5 py-0.5 rounded-full text-white shadow-md z-10">
+                            공통 고정 레이어</div>
+
+                        <div class="border-b border-slate-800 pb-2.5">
+                            <div class="flex items-center gap-2 text-blue-500 mb-0.5">
+                                <i class="fa-solid fa-comment-dots text-[24px] animate-bounce"></i>
+                                <h4 class="font-extrabold text-[18px] text-white">W1. 플로팅 AI 위젯</h4>
+                            </div>
+                            <div class="flex gap-1 mt-1">
+                                <span
+                                    class="text-[12px] bg-blue-500/20 text-blue-400 font-extrabold px-2 py-0.5 rounded border border-blue-500/10 font-mono">FN-WID-001</span>
+                                <span
+                                    class="text-[12px] bg-blue-500/20 text-blue-400 font-extrabold px-2 py-0.5 rounded border border-blue-500/10 font-mono">002</span>
+                            </div>
+                            <p class="text-[14px] text-slate-400 mt-1.5 leading-snug font-normal">포털 우측 하단 상시 고정.
+                                Q&amp;A
+                                ➔ 답변 시 액션 분기</p>
+                        </div>
+
+                        <!-- AI Action Cards -->
+                        <div class="flex-1 flex flex-col justify-center gap-2 my-2">
+
+                            <div id="node-w3"
+                                class="bg-slate-950 px-3 py-2 rounded-lg border border-slate-800 hover:border-slate-700 transition-all shadow-md relative">
+                                <div>
+                                    <div class="flex justify-between items-start mt-0.5">
+                                        <span class="text-[15px] text-slate-200 font-bold flex items-center"><i
+                                                class="fa-solid fa-magnifying-glass-chart text-blue-500 mr-1.5 text-[17px]"></i>
+                                            출처 분석 및 검증</span>
+                                        <span
+                                            class="bg-blue-600 text-white text-[12px] font-bold px-2 py-0.5 rounded-full mt-0.5">CORE</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <span
+                                            class="text-[12px] bg-blue-500/20 text-blue-400 font-extrabold px-2 py-0.5 rounded border border-blue-500/10 font-mono shrink-0">FN-WID-003</span>
+                                        <p class="text-[12px] text-slate-400 leading-snug font-normal">출처 카드 클릭 → 문서 뷰어
+                                            워프 및 형광펜</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="node-w4"
+                                class="bg-slate-950 px-3 py-2 rounded-lg border border-slate-800 hover:border-slate-700 transition-all shadow-md relative">
+                                <div>
+                                    <div class="flex justify-between items-start mt-0.5">
+                                        <span class="text-[15px] text-slate-200 font-bold flex items-center"><i
+                                                class="fa-solid fa-file-arrow-up text-blue-500 mr-1.5 text-[14px]"></i>
+                                            컨텍스트
+                                            파일 드롭</span>
+                                        <span
+                                            class="bg-blue-600 text-white text-[12px] font-bold px-2 py-0.5 rounded-full mt-0.5">CORE</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <span
+                                            class="text-[12px] bg-blue-500/20 text-blue-400 font-extrabold px-2 py-0.5 rounded border border-blue-500/10 font-mono shrink-0">FN-WID-004</span>
+                                        <p class="text-[12px] text-slate-400 leading-snug font-normal">PC 문서 드롭 → 범위 한정
+                                            즉시 질의</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="subcard-modB"
+                                class="bg-slate-950 px-3 py-2 rounded-lg border border-teal-800/60 hover:border-teal-700 transition-all shadow-md relative">
+                                <div>
+                                    <div class="flex justify-between items-start mt-0.5">
+                                        <span class="text-[15px] text-teal-300 font-bold flex items-center"><i
+                                                class="fa-solid fa-retweet mr-1.5 text-[14px]"></i> 지식 자산 역발행</span>
+                                        <span
+                                            class="bg-teal-600 text-white text-[12px] font-bold px-2 py-0.5 rounded-full mt-0.5">모듈
+                                            B</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <span
+                                            class="text-[12px] bg-teal-500/20 text-teal-400 font-extrabold px-2 py-0.5 rounded border border-teal-500/10 font-mono shrink-0">FN-WID-005</span>
+                                        <p class="text-[12px] text-slate-400 leading-snug font-normal">만족스러운 문답 → M3 FAQ
+                                            보관함 자동 전송</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="subcard-modD"
+                                class="bg-slate-950 px-3 py-2 rounded-lg border border-amber-800/60 hover:border-amber-700 transition-all shadow-md relative">
+                                <div>
+                                    <div class="flex justify-between items-start mt-0.5">
+                                        <span class="text-[15px] text-amber-300 font-bold flex items-center"><i
+                                                class="fa-solid fa-calendar-check mr-1.5 text-[14px]"></i> 액션 트래커</span>
+                                        <span
+                                            class="bg-amber-600 text-white text-[12px] font-bold px-2 py-0.5 rounded-full mt-0.5">모듈
+                                            D</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <span
+                                            class="text-[12px] bg-amber-500/20 text-amber-400 font-extrabold px-2 py-0.5 rounded border border-amber-500/10 font-mono shrink-0">FN-WID-006</span>
+                                        <p class="text-[12px] text-slate-400 leading-snug font-normal">메일, 회의실 예약,
+                                            회의록 작성 실시간 대행</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Bottom Warning -->
+                        <div id="widget-security-info"
+                            class="bg-blue-950/20 border border-blue-500/30 px-3 py-2 rounded-lg text-[14px] text-blue-300 flex items-center gap-1.5 shadow-inner font-semibold transition-opacity duration-300">
+                            <i class="fa-solid fa-lock text-[12px]"></i> 외부 LLM API 발송 전 민감정보 마스킹 필터 동작 중
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 3: CODE GUIDELINES ==================== -->
+        <!-- ==================== SLIDE 3: CODE GUIDELINES ==================== -->
+        <section id="slide-3"
+            class="slide-pane absolute inset-0 flex flex-col p-8 transition-all duration-400 transform translate-x-full opacity-0 overflow-y-auto">
+            <div class="flex justify-between items-center mb-8 border-b border-slate-800 pb-5">
+                <div>
+                    <span class="text-sm font-bold text-blue-500 tracking-wider uppercase">ARCHITECTURE CODING
+                        GUIDE</span>
+                    <h3 class="text-3xl font-extrabold text-white">기능명세서 Naming Code 명명 규칙 가이드</h3>
+                    <p class="text-base text-slate-400 mt-1">기능 ID의 컴포넌트 코드 패턴 규칙을 이해하면 전체적인 화면 설계 레이아웃 구조가 완벽하게 그려집니다.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Naming Convention Layout -->
+            <div class="flex-1 grid grid-cols-12 gap-8 items-stretch min-h-0">
+
+                <!-- Left: List of Codes -->
+                <div class="col-span-4 flex flex-col gap-2 overflow-y-auto pr-2 justify-between">
+                    <div class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2"><i
+                            class="fa-solid fa-list-check mr-2"></i> 컴포넌트 프리픽스 선택</div>
+
+                    <button onclick="selectCodeGuide('PTL')" id="btn-guide-PTL"
+                        class="guide-btn px-5 py-3 rounded-2xl border border-slate-800 bg-slate-900/50 hover:bg-slate-900 text-left transition-all flex justify-between items-center group">
+                        <div>
+                            <div
+                                class="font-extrabold text-base text-slate-200 group-hover:text-blue-400 transition-colors">
+                                FN-PTL (Portal Home)</div>
+                            <div class="text-sm text-slate-400 mt-1">포털 홈 대시보드 및 브리핑</div>
+                        </div>
+                        <i
+                            class="fa-solid fa-chevron-right text-slate-600 group-hover:text-blue-400 transition-all text-base"></i>
+                    </button>
+
+                    <button onclick="selectCodeGuide('STR')" id="btn-guide-STR"
+                        class="guide-btn px-5 py-3 rounded-2xl border border-slate-800 bg-slate-900/50 hover:bg-slate-900 text-left transition-all flex justify-between items-center group">
+                        <div>
+                            <div
+                                class="font-extrabold text-base text-slate-200 group-hover:text-blue-400 transition-colors">
+                                FN-STR (Storage)</div>
+                            <div class="text-sm text-slate-400 mt-1">지식 수집 저장소 및 파싱 인덱서</div>
+                        </div>
+                        <i
+                            class="fa-solid fa-chevron-right text-slate-600 group-hover:text-blue-400 transition-all text-base"></i>
+                    </button>
+
+                    <button onclick="selectCodeGuide('MNL')" id="btn-guide-MNL"
+                        class="guide-btn px-5 py-3 rounded-2xl border border-slate-800 bg-slate-900/50 hover:bg-slate-900 text-left transition-all flex justify-between items-center group">
+                        <div>
+                            <div
+                                class="font-extrabold text-base text-slate-200 group-hover:text-blue-400 transition-colors">
+                                FN-MNL (Manual) <span
+                                    class="bg-teal-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full ml-1 align-middle">모듈
+                                    B</span></div>
+                            <div class="text-sm text-slate-400 mt-1">온보딩 빌더 및 FAQ 자산 정제</div>
+                        </div>
+                        <i
+                            class="fa-solid fa-chevron-right text-slate-600 group-hover:text-blue-400 transition-all text-base"></i>
+                    </button>
+
+                    <button onclick="selectCodeGuide('WID')" id="btn-guide-WID"
+                        class="guide-btn px-5 py-3 rounded-2xl border border-slate-800 bg-slate-900/50 hover:bg-slate-900 text-left transition-all flex justify-between items-center group">
+                        <div>
+                            <div
+                                class="font-extrabold text-base text-slate-200 group-hover:text-blue-400 transition-colors">
+                                FN-WID (Widget) <span
+                                    class="bg-teal-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full ml-1 align-middle">모듈
+                                    B</span><span
+                                    class="bg-amber-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full ml-1 align-middle">모듈
+                                    D</span></div>
+                            <div class="text-sm text-slate-400 mt-1">상시 노출 플로팅 챗봇 위젯</div>
+                        </div>
+                        <i
+                            class="fa-solid fa-chevron-right text-slate-600 group-hover:text-blue-400 transition-all text-base"></i>
+                    </button>
+
+                    <button onclick="selectCodeGuide('CON')" id="btn-guide-CON"
+                        class="guide-btn px-5 py-3 rounded-2xl border border-slate-800 bg-slate-900/50 hover:bg-slate-900 text-left transition-all flex justify-between items-center group">
+                        <div>
+                            <div
+                                class="font-extrabold text-base text-slate-200 group-hover:text-blue-400 transition-colors">
+                                FN-CON (Connector) <span
+                                    class="bg-lime-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full ml-1 align-middle">모듈
+                                    A</span></div>
+                            <div class="text-sm text-slate-400 mt-1">외부 저장소 API 연동 및 동기화</div>
+                        </div>
+                        <i
+                            class="fa-solid fa-chevron-right text-slate-600 group-hover:text-blue-400 transition-all text-base"></i>
+                    </button>
+
+                    <button onclick="selectCodeGuide('USR')" id="btn-guide-USR"
+                        class="guide-btn px-5 py-3 rounded-2xl border border-slate-800 bg-slate-900/50 hover:bg-slate-900 text-left transition-all flex justify-between items-center group">
+                        <div>
+                            <div
+                                class="font-extrabold text-base text-slate-200 group-hover:text-blue-400 transition-colors">
+                                FN-USR (User Management)</div>
+                            <div class="text-sm text-slate-400 mt-1">사내 조직도 및 사원 권한 제어</div>
+                        </div>
+                        <i
+                            class="fa-solid fa-chevron-right text-slate-600 group-hover:text-blue-400 transition-all text-base"></i>
+                    </button>
+
+                    <button onclick="selectCodeGuide('ADM')" id="btn-guide-ADM"
+                        class="guide-btn px-5 py-3 rounded-2xl border border-slate-800 bg-slate-900/50 hover:bg-slate-900 text-left transition-all flex justify-between items-center group">
+                        <div>
+                            <div
+                                class="font-extrabold text-base text-slate-200 group-hover:text-blue-400 transition-colors">
+                                FN-ADM (Admin &amp; Security)
+                            </div>
+                            <div class="text-sm text-slate-400 mt-1">시스템 관리 및 엔터프라이즈 보안</div>
+                        </div>
+                        <i
+                            class="fa-solid fa-chevron-right text-slate-600 group-hover:text-blue-400 transition-all text-base"></i>
+                    </button>
+
+                    <button onclick="selectCodeGuide('GOV')" id="btn-guide-GOV"
+                        class="guide-btn px-5 py-3 rounded-2xl border border-slate-800 bg-slate-900/50 hover:bg-slate-900 text-left transition-all flex justify-between items-center group">
+                        <div>
+                            <div
+                                class="font-extrabold text-base text-slate-200 group-hover:text-blue-400 transition-colors">
+                                FN-GOV (Governance) <span
+                                    class="bg-purple-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full ml-1 align-middle">모듈
+                                    C</span></div>
+                            <div class="text-sm text-slate-400 mt-1">외부 ACL 자동 동기화 및 동적 거버넌스</div>
+                        </div>
+                        <i
+                            class="fa-solid fa-chevron-right text-slate-600 group-hover:text-blue-400 transition-all text-base"></i>
+                    </button>
+                </div>
+
+                <!-- Right: Details Box (High Contrast) -->
+                <div
+                    class="col-span-8 bg-slate-900 rounded-2xl border border-slate-800 p-8 flex flex-col justify-between shadow-lg">
+
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4 border-b border-slate-800 pb-5">
+                            <span
+                                class="bg-blue-600/20 text-blue-400 p-4 rounded-2xl text-2xl font-bold border border-blue-500/20"
+                                id="guide-icon">
+                                <i class="fa-solid fa-house-user"></i>
+                            </span>
+                            <div>
+                                <h4 class="text-3xl font-extrabold text-white" id="guide-title">FN-PTL (Portal Home)
+                                </h4>
+                                <p class="text-base text-slate-400 mt-1.5">포털 홈 대시보드 및 업무 브리핑 카테고리 정의</p>
+                            </div>
+                        </div>
+
+                        <!-- Technical Specs Card -->
+                        <div class="bg-slate-950 rounded-2xl p-6 border border-slate-800/80 space-y-4">
+                            <div>
+                                <h5 class="text-base font-extrabold text-slate-400 mb-2">Prefix 구성 정의 및 역할</h5>
+                                <p class="text-base text-slate-200 leading-relaxed font-semibold" id="guide-desc">
+                                    출근 후 사용자가 마주하는 사내 정보 및 AI 업무 브리핑 대시보드 영역을 제어합니다. 복잡하고 산재한 사내 핵심 문서를 AI가 정제하여 임직원의 시선
+                                    이동 흐름상 가장 먼저 노출되는 대형 화면입니다.
+                                </p>
+                            </div>
+
+                            <div class="border-t border-slate-800/80 pt-4">
+                                <h5 class="text-base font-extrabold text-slate-400 mb-2">관련 기능 ID 목록</h5>
+                                <div class="flex gap-2.5 mt-2" id="guide-fid-list">
+                                    <span
+                                        class="text-sm bg-blue-500/10 text-blue-400 font-mono font-bold px-4 py-2 rounded-xl border border-blue-500/20">FN-PTL-001</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Highlight Info Base -->
+                    <div
+                        class="bg-blue-950/10 border border-blue-500/20 p-5 rounded-2xl flex items-center gap-4 shadow-sm">
+                        <div class="text-blue-400 text-xl"><i class="fa-solid fa-circle-info text-2xl"></i></div>
+                        <p class="text-base text-slate-300 leading-relaxed">
+                            기본 기동 스펙은 <strong>[공통 Core]</strong>에 해당하며, 모든 라이선스 버전에 기본 탑재되어 기획 흐름의 출발점을 장식합니다.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 4: DETAILED USER FLOW ==================== -->
+        <section id="slide-4"
+            class="slide-pane absolute inset-0 flex flex-col p-8 transition-all duration-400 transform translate-x-full opacity-0 overflow-y-auto">
+            <div class="flex justify-between items-start mb-8 border-b border-slate-800 pb-5">
+                <div>
+                    <span class="text-sm font-bold text-blue-500 tracking-wider uppercase">SCENARIO WALKTHROUGH</span>
+                    <h3 class="text-3xl font-extrabold text-white">단계별 시나리오 기반 사용자 흐름 상세</h3>
+                    <p class="text-base text-slate-400 mt-1">사내 임직원이 출근 후 업무를 개시하고 종료하기까지 거치는 5가지 동선 시나리오입니다.</p>
+                </div>
+            </div>
+
+            <!-- Flow Step Timeline with larger card texts -->
+            <div class="grid grid-cols-5 gap-6 my-auto py-[160px]">
+
+                <!-- Step 1 (CORE ONLY) -->
+                <div class="relative w-full h-[250px]">
+                    <div
+                        class="bg-slate-900 p-5 rounded-2xl border border-slate-800 relative group hover:border-blue-500 transition-all duration-300 flex flex-col justify-between h-full shadow-lg z-20">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-3xl font-extrabold text-blue-500">01</span>
+                            <div class="flex items-center gap-2">
+                                <span
+                                    class="bg-blue-600 text-white text-[10px] font-extrabold px-2 py-1 rounded-full">CORE</span>
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-base font-bold border border-blue-500/10">
+                                    진입</div>
+                            </div>
+                        </div>
+                        <div class="flex-1 flex flex-col">
+                            <h4
+                                class="font-extrabold text-lg text-white mb-3 group-hover:text-blue-400 transition-colors">
+                                출근 및 업무 정보 인지</h4>
+                            <p class="text-[13px] text-slate-300 leading-relaxed font-normal">
+                                포털 메인 홈 대시보드(M1)에 로그인하여 AI가 정제해 놓은 <strong>'오늘의 핵심 전사 브리핑 카드'</strong>를 읽고 사내 실시간 정보 동향을
+                                파악합니다.
+                            </p>
+                        </div>
+                        <div
+                            class="border-t border-slate-800 pt-3 mt-3 text-xs text-slate-500 font-mono flex items-center gap-1.5 font-bold">
+                            <i class="fa-solid fa-link text-blue-500"></i> FN-PTL-001
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 (CORE + MODULE A TOP) -->
+                <div class="relative w-full h-[250px]">
+                    <!-- Module A Add-on (Top) -->
+                    <div
+                        class="absolute -top-[160px] left-1/2 transform -translate-x-1/2 w-[110%] bg-slate-900 border-2 border-lime-500 rounded-2xl p-5 shadow-lg shadow-lime-500/20 z-30 flex flex-col gap-2 transition-transform hover:-translate-y-1">
+                        <div
+                            class="absolute -bottom-[20px] left-1/2 transform -translate-x-1/2 w-0.5 h-[20px] bg-lime-500">
+                        </div>
+                        <div
+                            class="absolute -bottom-[24px] left-1/2 transform -translate-x-1/2 w-3 h-3 rounded-full border-2 border-lime-500 bg-slate-900 z-20">
+                        </div>
+                        <div class="flex items-center justify-between mb-1">
+                            <div class="flex items-center gap-1.5">
+                                <span class="bg-lime-500 text-slate-900 text-xs font-black px-2.5 py-1 rounded">Module
+                                    A</span>
+                                <span
+                                    class="text-lime-400 font-mono text-[10px] font-bold px-1.5 py-0.5 rounded border border-lime-500/20 bg-lime-500/10">FN-CON-001</span>
+                            </div>
+                            <span class="text-lime-400 text-xs font-bold"><i class="fa-solid fa-plug"></i> 커넥터</span>
+                        </div>
+                        <h5 class="text-white font-extrabold text-base">외부 지식 자동 수집</h5>
+                        <p class="text-slate-300 text-[13px] leading-relaxed font-normal">Google Drive, Slack 데이터 실시간 수집
+                            및 원본 권한 연동</p>
+                    </div>
+
+                    <!-- Core Card -->
+                    <div
+                        class="bg-slate-900 p-5 rounded-2xl border border-slate-800 relative group hover:border-blue-500 transition-all duration-300 flex flex-col justify-between h-full shadow-lg z-20">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-3xl font-extrabold text-blue-500">02</span>
+                            <div class="flex items-center gap-2">
+                                <span
+                                    class="bg-blue-600 text-white text-[10px] font-extrabold px-2 py-1 rounded-full">CORE</span>
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-base font-bold border border-blue-500/10">
+                                    탐색</div>
+                            </div>
+                        </div>
+                        <div class="flex-1 flex flex-col">
+                            <h4
+                                class="font-extrabold text-lg text-white mb-3 group-hover:text-blue-400 transition-colors">
+                                사내 문서 업로드</h4>
+                            <p class="text-[13px] text-slate-300 leading-relaxed font-normal">
+                                스마트 지식 저장소(M2)에서 사내 문서를 올립니다. AI Parser가 백그라운드에서 텍스트를 추출하고 <strong>태깅 분류</strong>를
+                                완료합니다.
+                            </p>
+                        </div>
+                        <div
+                            class="border-t border-slate-800 pt-3 mt-3 text-xs text-slate-500 font-mono flex items-center gap-1.5 font-bold">
+                            <i class="fa-solid fa-link text-blue-500"></i> FN-STR-001, 002
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 (CORE + MODULE C BOTTOM) -->
+                <div class="relative w-full h-[250px]">
+                    <!-- Module C Add-on (Bottom) -->
+                    <div
+                        class="absolute -bottom-[160px] left-1/2 transform -translate-x-1/2 w-[110%] bg-slate-900 border-2 border-purple-500 rounded-2xl p-5 shadow-lg shadow-purple-500/20 z-30 flex flex-col gap-2 transition-transform hover:translate-y-1">
+                        <div
+                            class="absolute -top-[20px] left-1/2 transform -translate-x-1/2 w-0.5 h-[20px] bg-purple-500">
+                        </div>
+                        <div
+                            class="absolute -top-[24px] left-1/2 transform -translate-x-1/2 w-3 h-3 rounded-full border-2 border-purple-500 bg-slate-900 z-20">
+                        </div>
+                        <div class="flex items-center justify-between mb-1">
+                            <div class="flex items-center gap-1.5">
+                                <span class="bg-purple-500 text-white text-xs font-black px-2.5 py-1 rounded">Module
+                                    C</span>
+                                <span
+                                    class="text-purple-400 font-mono text-[10px] font-bold px-1.5 py-0.5 rounded border border-purple-500/20 bg-purple-500/10">FN-GOV-001</span>
+                            </div>
+                            <span class="text-purple-400 text-xs font-bold"><i class="fa-solid fa-shield-halved"></i> 보안
+                                거버넌스</span>
+                        </div>
+                        <h5 class="text-white font-extrabold text-base">외부 연동 ACL 자동 필터링</h5>
+                        <p class="text-slate-300 text-[13px] leading-relaxed font-normal">외부 시스템 권한 자동 동기화로 비인가 문서 검색 원천
+                            차단
+                        </p>
+                    </div>
+
+                    <!-- Core Card -->
+                    <div
+                        class="bg-slate-900 p-5 rounded-2xl border border-slate-800 relative group hover:border-blue-500 transition-all duration-300 flex flex-col justify-between h-full shadow-lg z-20">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-3xl font-extrabold text-blue-500">03</span>
+                            <div class="flex items-center gap-2">
+                                <span
+                                    class="bg-blue-600 text-white text-[10px] font-extrabold px-2 py-1 rounded-full">CORE</span>
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-base font-bold border border-blue-500/10">
+                                    질의</div>
+                            </div>
+                        </div>
+                        <div class="flex-1 flex flex-col">
+                            <h4
+                                class="font-extrabold text-lg text-white mb-3 group-hover:text-blue-400 transition-colors">
+                                상시 플로팅 챗봇 검색</h4>
+                            <p class="text-[13px] text-slate-300 leading-relaxed font-normal">
+                                화면 우측 하단의 <strong>W1 플로팅 챗봇 위젯</strong>을 켜서 질문하고 사내 규정집과 문서를 RAG 엔진으로 신속하게 분석합니다.
+                            </p>
+                        </div>
+                        <div
+                            class="border-t border-slate-800 pt-3 mt-3 text-xs text-slate-500 font-mono flex items-center gap-1.5 font-bold">
+                            <i class="fa-solid fa-link text-blue-500"></i> FN-WID-001, 002
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 (CORE + MODULE D TOP) -->
+                <div class="relative w-full h-[250px]">
+                    <!-- Module D Add-on (Top) -->
+                    <div
+                        class="absolute -top-[160px] left-1/2 transform -translate-x-1/2 w-[110%] bg-slate-900 border-2 border-amber-500 rounded-2xl p-5 shadow-lg shadow-amber-500/20 z-30 flex flex-col gap-2 transition-transform hover:-translate-y-1">
+                        <div
+                            class="absolute -bottom-[20px] left-1/2 transform -translate-x-1/2 w-0.5 h-[20px] bg-amber-500">
+                        </div>
+                        <div
+                            class="absolute -bottom-[24px] left-1/2 transform -translate-x-1/2 w-3 h-3 rounded-full border-2 border-amber-500 bg-slate-900 z-20">
+                        </div>
+                        <div class="flex items-center justify-between mb-1">
+                            <div class="flex items-center gap-1.5">
+                                <span class="bg-amber-500 text-slate-900 text-xs font-black px-2.5 py-1 rounded">Module
+                                    D</span>
+                                <span
+                                    class="text-amber-400 font-mono text-[10px] font-bold px-1.5 py-0.5 rounded border border-amber-500/20 bg-amber-500/10">FN-WID-006</span>
+                            </div>
+                            <span class="text-amber-400 text-xs font-bold"><i class="fa-solid fa-bolt"></i> 업무
+                                자동화</span>
+                        </div>
+                        <h5 class="text-white font-extrabold text-base">후속 실무 액션 대행</h5>
+                        <p class="text-slate-300 text-[13px] leading-relaxed font-normal">위젯 창에서 곧바로 유관 부서 요약 메일 발송 및 상신
+                        </p>
+                    </div>
+
+                    <!-- Core Card -->
+                    <div
+                        class="bg-slate-900 p-5 rounded-2xl border border-slate-800 relative group hover:border-blue-500 transition-all duration-300 flex flex-col justify-between h-full shadow-lg z-20">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-3xl font-extrabold text-blue-500">04</span>
+                            <div class="flex items-center gap-2">
+                                <span
+                                    class="bg-blue-600 text-white text-[10px] font-extrabold px-2 py-1 rounded-full">CORE</span>
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-base font-bold border border-blue-500/10">
+                                    액션</div>
+                            </div>
+                        </div>
+                        <div class="flex-1 flex flex-col">
+                            <h4
+                                class="font-extrabold text-lg text-white mb-3 group-hover:text-blue-400 transition-colors">
+                                답변 출처 및 팩트 체크</h4>
+                            <p class="text-[13px] text-slate-300 leading-relaxed font-normal">
+                                AI가 잘못된 정보를 제공하는 것을 방지하기 위해 답변 밑의 <strong>출처 매칭 카드</strong>를 누릅니다. 근거 문서 위치가 형광펜으로 즉각
+                                표시되어 검증합니다.
+                            </p>
+                        </div>
+                        <div
+                            class="border-t border-slate-800 pt-3 mt-3 text-xs text-slate-500 font-mono flex items-center gap-1.5 font-bold">
+                            <i class="fa-solid fa-link text-blue-500"></i> FN-WID-003
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 5 (CORE + MODULE B BOTTOM) -->
+                <div class="relative w-full h-[250px]">
+                    <!-- Module B Add-on (Bottom) -->
+                    <div
+                        class="absolute -bottom-[160px] left-1/2 transform -translate-x-1/2 w-[110%] bg-slate-900 border-2 border-teal-500 rounded-2xl p-5 shadow-lg shadow-teal-500/20 z-30 flex flex-col gap-2 transition-transform hover:translate-y-1">
+                        <div
+                            class="absolute -top-[20px] left-1/2 transform -translate-x-1/2 w-0.5 h-[20px] bg-teal-500">
+                        </div>
+                        <div
+                            class="absolute -top-[24px] left-1/2 transform -translate-x-1/2 w-3 h-3 rounded-full border-2 border-teal-500 bg-slate-900 z-20">
+                        </div>
+                        <div class="flex items-center justify-between mb-1">
+                            <div class="flex items-center gap-1.5">
+                                <span class="bg-teal-500 text-slate-900 text-xs font-black px-2.5 py-1 rounded">Module
+                                    B</span>
+                                <span
+                                    class="text-teal-400 font-mono text-[10px] font-bold px-1.5 py-0.5 rounded border border-teal-500/20 bg-teal-500/10">FN-WID-005</span>
+                            </div>
+                            <span class="text-teal-400 text-xs font-bold"><i class="fa-solid fa-book-open-reader"></i>
+                                매뉴얼 빌더</span>
+                        </div>
+                        <h5 class="text-white font-extrabold text-base">팀 자산 FAQ 역발행</h5>
+                        <p class="text-slate-300 text-[13px] leading-relaxed font-normal">유용한 문답을 M3 저장소의 정식 노하우 매뉴얼로 즉시
+                            환원</p>
+                    </div>
+
+                    <!-- Core Card -->
+                    <div
+                        class="bg-slate-900 p-5 rounded-2xl border border-slate-800 relative group hover:border-blue-500 transition-all duration-300 flex flex-col justify-between h-full shadow-lg z-20">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-3xl font-extrabold text-blue-500">05</span>
+                            <div class="flex items-center gap-2">
+                                <span
+                                    class="bg-blue-600 text-white text-[10px] font-extrabold px-2 py-1 rounded-full">CORE</span>
+                                <div
+                                    class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 text-base font-bold border border-blue-500/10">
+                                    활용</div>
+                            </div>
+                        </div>
+                        <div class="flex-1 flex flex-col">
+                            <h4
+                                class="font-extrabold text-lg text-white mb-3 group-hover:text-blue-400 transition-colors">
+                                지식 내재화 및 업무 적용</h4>
+                            <p class="text-[13px] text-slate-300 leading-relaxed font-normal">
+                                검증된 AI의 답변과 추출된 파일들을 <strong>임시 드롭 존(FN-WID-004)</strong>에 보관하여 실제 실무 기획서 작성에 신속하게
+                                반영합니다.
+                            </p>
+                        </div>
+                        <div
+                            class="border-t border-slate-800 pt-3 mt-3 text-xs text-slate-500 font-mono flex items-center gap-1.5 font-bold">
+                            <i class="fa-solid fa-link text-blue-500"></i> FN-WID-004
+                        </div>
+                    </div>
+                </div>
+        </section>
+
+        <!-- ==================== SLIDE 5: MASTER FEATURE & IA MAP BOARD ==================== -->
+        <section id="slide-5"
+            class="slide-pane absolute inset-0 flex flex-col p-8 transition-all duration-400 transform translate-x-full opacity-0 overflow-y-auto">
+            <div class="flex justify-between items-center mb-6 border-b border-slate-800 pb-5">
+                <div>
+                    <span class="text-sm font-bold text-blue-400 tracking-wider uppercase">INTERACTIVE MAP SEARCH
+                        BOARD</span>
+                    <h3 class="text-3xl font-extrabold text-white">엑셀 매핑 메뉴구조도 & 기능명세서 마스터 보드</h3>
+                    <p class="text-base text-slate-400 mt-1">엑셀 통합 마스터 플랜의 각 탭과 시나리오에 맞는 세부 구조와 화면 설정을 직관적으로 확인하세요.</p>
+                </div>
+            </div>
+
+            <!-- Tab Board Component -->
+            <div class="flex-1 flex flex-col bg-slate-900 rounded-2xl border border-slate-800 p-6 min-h-0 shadow-lg">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-4 mb-4">
+                    <div class="flex bg-slate-950 p-1.5 rounded-xl border border-slate-800">
+                        <button onclick="switchIAMapTab('user')" id="ia-tab-user"
+                            class="px-5 py-2.5 text-sm font-extrabold rounded-lg transition-all bg-blue-600 text-white"><i
+                                class="fa-solid fa-user-tie mr-2"></i> M1 ~ M4 임직원 뷰</button>
+                        <button onclick="switchIAMapTab('widget')" id="ia-tab-widget"
+                            class="px-5 py-2.5 text-sm font-extrabold rounded-lg transition-all text-slate-400 hover:text-slate-200"><i
+                                class="fa-solid fa-comments mr-2"></i> W1 공통 플로팅 위젯</button>
+                        <button onclick="switchIAMapTab('admin')" id="ia-tab-admin"
+                            class="px-5 py-2.5 text-sm font-extrabold rounded-lg transition-all text-slate-400 hover:text-slate-200"><i
+                                class="fa-solid fa-sliders mr-2"></i> A1 ~ A4 마스터 관리자 뷰</button>
+                    </div>
+
+                    <!-- Search inside IA -->
+                    <div class="relative w-96">
+                        <input type="text" id="ia-search-input" onkeyup="searchIAMap()"
+                            placeholder="연동 기능 ID, 화면명 검색..."
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors pl-11 shadow-inner">
+                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-500 text-base"></i>
+                    </div>
+                </div>
+
+                <!-- Table Content Container (Bigger Row texts) -->
+                <div class="flex-1 overflow-y-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-800 text-sm font-extrabold text-slate-300 bg-slate-950/40">
+                                <th class="p-4 rounded-tl-xl w-[11%]">대분류 (Depth 1)</th>
+                                <th class="p-4 w-[11%]">중분류 (Depth 2)</th>
+                                <th class="p-4 w-[11%]">화면/레이어 (Depth 3)</th>
+                                <th class="p-4 w-[10%]">적용 모듈</th>
+                                <th class="p-4 w-[12%]">연동 기능 ID</th>
+                                <th class="p-4 rounded-tr-xl">화면 설명 & UI 가이드</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ia-table-body" class="divide-y divide-slate-800/60 text-base">
+                            <!-- Dynamic Content Injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SLIDE 6: LICENSING MODULE GUIDE ==================== -->
+        <section id="slide-6"
+            class="slide-pane absolute inset-0 flex flex-col p-8 transition-all duration-400 transform translate-x-full opacity-0 overflow-y-auto">
+            <div class="flex justify-between items-center mb-8 border-b border-slate-800 pb-5">
+                <div>
+                    <span class="text-sm font-bold text-blue-500 tracking-wider uppercase">SALES & TIERING
+                        STRATEGY</span>
+                    <h3 class="text-3xl font-extrabold text-white">타겟 기업 규모에 따른 올인원 모듈형 제안 전략</h3>
+                    <p class="text-base text-slate-400 mt-1">도입 전 무상 체험 단계부터 대기업 풀패키지까지, 단계별 도입 장벽 완화와 누적식 업셀링을 위한 마케팅
+                        전략입니다.</p>
+                </div>
+            </div>
+
+            <!-- Tier Cards with increased readability (4-Column Layout) -->
+            <div class="flex-1 grid grid-cols-4 gap-5 items-center">
+
+                <!-- Sandbox Trial (FREE/POC) -->
+                <div
+                    class="bg-slate-900/50 p-6 rounded-3xl border border-dashed border-emerald-500/50 hover:border-emerald-400 transition-all flex flex-col justify-between h-[450px] shadow-lg shadow-emerald-950/10">
+                    <div class="space-y-4">
+                        <div
+                            class="text-emerald-400 text-xs font-bold tracking-wider uppercase flex items-center gap-1.5">
+                            <span class="flex h-2 w-2 relative">
+                                <span
+                                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                            </span>
+                            Sandbox Trial (무상 체험판)
+                        </div>
+                        <h4 class="text-2xl font-extrabold text-white">RAG 검색 엔진 사전 검증</h4>
+                        <p class="text-[15px] text-slate-300 leading-relaxed font-normal">
+                            "정식 계약 전, 소규모 부서 단위의 가벼운 문서 파싱 및 자연어 RAG 답변 신뢰도 사전 체감 및 UI 적응 단계"
+                        </p>
+
+                        <div class="space-y-2 pt-2">
+                            <div class="text-[14px] font-bold text-slate-400 uppercase tracking-wide"><i
+                                    class="fa-solid fa-circle-play text-emerald-500 mr-1.5"></i> 체험 제공 모듈</div>
+                            <div class="flex items-center gap-2 text-[15px] text-slate-200 font-medium"><i
+                                    class="fa-solid fa-circle-check text-blue-500 text-[15px]"></i> 공통 필수 Core (검색 +
+                                저장소)
+                            </div>
+                            <div class="text-[14px] text-slate-500 leading-normal pl-5">• 업로드 용량 제한 (최대 1GB)<br>• 최대
+                                동시접속 10인 한정</div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-800 pt-4 mt-4 flex justify-between items-center">
+                        <span class="text-[14px] text-slate-500 font-semibold">사용 기한: 최대 14일</span>
+                        <span
+                            class="bg-emerald-500/10 text-emerald-400 font-extrabold text-[15px] px-3 py-1.5 rounded-xl border border-emerald-500/10">무상
+                            간편 체험</span>
+                    </div>
+                </div>
+
+                <!-- SMB (Small Business) -->
+                <div
+                    class="bg-slate-900 p-6 rounded-3xl border border-slate-800 hover:border-slate-700 transition-all flex flex-col justify-between h-[450px] shadow-lg">
+                    <div class="space-y-4">
+                        <div class="text-slate-400 text-xs font-bold tracking-wider uppercase">SMB Tier (초경량 보급형)</div>
+                        <h4 class="text-2xl font-extrabold text-white">핵심 지식 관리 뼈대 구축</h4>
+                        <p class="text-[15px] text-slate-300 leading-relaxed font-normal">
+                            "체계적인 표준 인수인계 프로세스가 미흡하고, 1인 다역으로 중요 노하우 아카이빙이 우선인 소규모 사업장 대상"
+                        </p>
+
+                        <div class="space-y-2 pt-2">
+                            <div class="text-[14px] font-bold text-slate-400 uppercase tracking-wide"><i
+                                    class="fa-solid fa-toggle-on text-emerald-500 mr-1.5"></i> 기본 활성 모듈</div>
+                            <div class="flex items-center gap-2 text-[15px] text-slate-200 font-medium"><i
+                                    class="fa-solid fa-circle-check text-blue-500 text-[15px]"></i> 공통 필수 Core (지식 검색 &
+                                저장소)
+                            </div>
+                            <div class="flex items-center gap-2 text-[15px] text-slate-200 font-medium"><i
+                                    class="fa-solid fa-circle-check text-teal-500 text-[15px]"></i> Module B (매뉴얼 빌더
+                                역발행)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-800 pt-4 mt-4 flex justify-between items-center">
+                        <span class="text-[14px] text-slate-500 font-bold">도입 권장: 50인 이하 기업</span>
+                        <span
+                            class="bg-blue-600/10 text-blue-400 font-extrabold text-[15px] px-3 py-1.5 rounded-xl border border-blue-500/10">빠른
+                            세팅 가성비</span>
+                    </div>
+                </div>
+
+                <!-- Mid-Market (중견기업) -->
+                <div
+                    class="bg-slate-900 p-6 rounded-3xl border-2 border-blue-600 hover:border-blue-500 relative overflow-hidden flex flex-col justify-between h-[450px] shadow-2xl shadow-blue-500/5">
+                    <div
+                        class="absolute top-0 right-0 bg-blue-600 text-[12px] font-extrabold px-3 py-1.5 rounded-bl-2xl text-white">
+                        추천 베스트 패키지</div>
+                    <div class="space-y-4">
+                        <div class="text-blue-400 text-xs font-bold tracking-wider uppercase">Mid-Market Tier (통합형)
+                        </div>
+                        <h4 class="text-2xl font-extrabold text-white">파편화 통합 및 협업 지원</h4>
+                        <p class="text-[15px] text-slate-300 leading-relaxed font-normal">
+                            "드라이브, 위키, 슬랙 등 파편화된 다채널 데이터를 실시간 동기화하여 신규 입사자 교육 리소스를 90% 아웃소싱"
+                        </p>
+
+                        <div class="space-y-2 pt-2">
+                            <div class="text-[14px] font-bold text-slate-400 uppercase tracking-wide"><i
+                                    class="fa-solid fa-toggle-on text-emerald-500 mr-1.5"></i> 기본 활성 모듈</div>
+                            <div class="flex items-center gap-2 text-[15px] text-slate-200 font-medium"><i
+                                    class="fa-solid fa-circle-check text-blue-500 text-[15px]"></i> 공통 필수 Core (지식 검색 &
+                                저장소)
+                            </div>
+                            <div class="flex items-center gap-2 text-[15px] text-slate-200 font-medium"><i
+                                    class="fa-solid fa-circle-check text-lime-500 text-[15px]"></i> Module A (데이터 커넥션
+                                실시간)
+                            </div>
+                            <div class="flex items-center gap-2 text-[15px] text-slate-200 font-medium"><i
+                                    class="fa-solid fa-circle-check text-teal-500 text-[15px]"></i> Module B (매뉴얼 빌더 노하우
+                                역발행)</div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-800 pt-4 mt-4 flex justify-between items-center">
+                        <span class="text-[14px] text-slate-500 font-bold">도입 권장: 100인~500인</span>
+                        <span
+                            class="bg-blue-600 text-white font-extrabold text-[15px] px-3 py-1.5 rounded-xl shadow-md">강력
+                            추천</span>
+                    </div>
+                </div>
+
+                <!-- Enterprise (대기업) -->
+                <div
+                    class="bg-slate-900 p-6 rounded-3xl border-2 border-purple-600 relative overflow-hidden hover:border-purple-500 relative transition-all flex flex-col justify-between h-[450px] shadow-lg">
+                    <div
+                        class="absolute top-0 right-0 bg-purple-600 text-[12px] font-bold px-3 py-1.5 rounded-bl-2xl text-white">
+                        ALL-IN-ONE 마스터 등급</div>
+                    <div class="space-y-4">
+                        <div class="text-purple-400 text-xs font-bold tracking-wider uppercase">Enterprise Ultimate
+                            (풀패키지)</div>
+                        <h4 class="text-2xl font-extrabold text-white">철저한 보안 감사 및 업무 대행</h4>
+                        <p class="text-[15px] text-slate-300 leading-relaxed font-normal">
+                            "보안 규격(C) 및 실무 자동화(D)뿐만 아니라 다채널 외부 연동(A)과 FAQ 자산 구축(B)이 총망라된 마스터 솔루션"
+                        </p>
+
+                        <div class="space-y-2 pt-2">
+                            <div class="text-[14px] font-bold text-slate-400 uppercase tracking-wide"><i
+                                    class="fa-solid fa-toggle-on text-purple-500 mr-1.5"></i> 기본 활성 모듈</div>
+                            <div class="flex items-center gap-2 text-[15px] text-slate-200 font-medium"><i
+                                    class="fa-solid fa-circle-check text-blue-500 text-[15px]"></i> 공통 필수 Core + Module
+                                A, B
+                                기본 탑재</div>
+                            <div class="flex items-center gap-2 text-[15px] text-slate-200 font-medium"><i
+                                    class="fa-solid fa-circle-check text-purple-500 text-[15px]"></i> Module C (외부 ACL
+                                자동 동기화
+                                및
+                                동적 거버넌스 정책 엔진)</div>
+                            <div class="flex items-center gap-2 text-[15px] text-slate-200 font-medium"><i
+                                    class="fa-solid fa-circle-check text-amber-500 text-[15px]"></i> Module D (메일 발송 및
+                                기안
+                                상신 자동화 연동)</div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-800 pt-4 mt-4 flex justify-between items-center">
+                        <span class="text-[14px] text-slate-500 font-bold">도입 권장: 500인 이상 대형사</span>
+                        <span
+                            class="bg-purple-600/10 text-purple-400 font-extrabold text-[15px] px-3 py-1.5 rounded-xl border border-purple-500/10 font-black">무제한
+                            에디션</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Bottom Presentation Progress Bar & Navigation Controls -->
+    <footer class="bg-slate-900 border-t border-slate-800 px-8 py-5 flex justify-between items-center z-10 shadow-lg">
+        <div class="text-sm text-slate-400 font-bold">
+            슬라이드 <span id="current-slide-num" class="font-black text-slate-100 text-base">1</span> / 6
+        </div>
+
+        <!-- Interactive Slide Indicators -->
+        <div class="flex gap-3">
+            <span class="slide-dot h-2.5 w-8 bg-blue-600 rounded-full transition-all duration-300 cursor-pointer"
+                id="dot-1" onclick="changeSlide(1)"></span>
+            <span
+                class="slide-dot h-2.5 w-2.5 bg-slate-800 rounded-full hover:bg-slate-700 transition-all duration-300 cursor-pointer"
+                id="dot-2" onclick="changeSlide(2)"></span>
+            <span
+                class="slide-dot h-2.5 w-2.5 bg-slate-800 rounded-full hover:bg-slate-700 transition-all duration-300 cursor-pointer"
+                id="dot-3" onclick="changeSlide(3)"></span>
+            <span
+                class="slide-dot h-2.5 w-2.5 bg-slate-800 rounded-full hover:bg-slate-700 transition-all duration-300 cursor-pointer"
+                id="dot-4" onclick="changeSlide(4)"></span>
+            <span
+                class="slide-dot h-2.5 w-2.5 bg-slate-800 rounded-full hover:bg-slate-700 transition-all duration-300 cursor-pointer"
+                id="dot-5" onclick="changeSlide(5)"></span>
+            <span
+                class="slide-dot h-2.5 w-2.5 bg-slate-800 rounded-full hover:bg-slate-700 transition-all duration-300 cursor-pointer"
+                id="dot-6" onclick="changeSlide(6)"></span>
+        </div>
+
+        <!-- Prev/Next Controls -->
+        <div class="flex gap-3">
+            <button onclick="prevSlide()"
+                class="bg-slate-800 hover:bg-slate-700 text-white px-5 py-2.5 rounded-xl transition-all font-bold text-sm flex items-center gap-2 shadow">
+                <i class="fa-solid fa-chevron-left text-xs"></i> 이전
+            </button>
+            <button onclick="nextSlide()"
+                class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-xl transition-all font-bold text-sm flex items-center gap-2 shadow">
+                다음 <i class="fa-solid fa-chevron-right text-xs"></i>
+            </button>
+        </div>
+    </footer>
+
+    <!-- Interactive JavaScript Engine -->
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 6;
+
+        // Interactive Database mapped from Perfect Blueprint Excel sheets
+        const iaMasterDatabase = {
+            "user": [
+                { depth1: "M1. 홈 대시보드", depth2: "AI 추천 & 브리핑", depth3: "업무 브리핑 영역", module: "공통 Core (전직원)", fid: "FN-PTL-001", desc: "출근 시 첫 화면에 AI가 요약한 오늘의 전사 핵심 업무 및 트렌드 브리핑 제공", mode: "메인 콘텐츠 영역" },
+                { depth1: "M1. 홈 대시보드", depth2: "마이 워크스페이스", depth3: "최근 문서/초안 보관함", module: "공통 Core (전직원)", fid: "FN-PTL-001", desc: "내가 최근에 조회한 문서, 북마크 및 AI와 작업 중인 보고서 초안 리스트를 한눈에 모니터링", mode: "메인 콘텐츠 영역" },
+                { depth1: "M2. 스마트 지식 저장소", depth2: "중앙 문서함", depth3: "부서별/프로젝트별 폴더", module: "공통 Core (전직원)", fid: "FN-STR-001", desc: "사내 정형/비정형 문서들을 트리형 폴더로 관리하고 대용량 파일 드래그 업로드 및 AI Parsing", mode: "메인 콘텐츠 영역" },
+                { depth1: "M2. 스마트 지식 저장소", depth2: "AI 자동 태그 보관함", depth3: "스마트 카테고리 뷰", module: "공통 Core (전직원)", fid: "FN-STR-002", desc: "AI가 문서 내용을 자율 분석하여 카테고리 자동 맵핑 및 가상 태그별 필터 뷰 제공", mode: "메인 콘텐츠 영역" },
+                { depth1: "M3. AI 매뉴얼 빌더", depth2: "온보딩 가이드", depth3: "신규 입사자 로드맵 생성", module: "Module B (선택)", fid: "FN-MNL-001", desc: "입사자 프로필 기반 맞춤형 사내 지식 학습 가이드 및 체크리스트 가이드 자동 수립", mode: "메인 콘텐츠 영역" },
+                { depth1: "M3. AI 매뉴얼 빌더", depth2: "노하우 아카이브", depth3: "실무 팁 & FAQ 관리", module: "Module B (선택)", fid: "FN-WID-005", desc: "챗봇 위젯에서 검증받은 팁을 역발행하거나 수동 정제하여 전사 FAQ에 등록 보관", mode: "메인 콘텐츠 영역" },
+                { depth1: "M4. AI 워크플로우", depth2: "에이전트 요청", depth3: "보고서 초안 작성기", module: "Module D (선택)", fid: "FN-WID-006", desc: "사내 기획서, 회의실 예약, 회의록 작성, 결재 등 AI 에이전트를 통한 외부 액션 대행 제어", mode: "메인 콘텐츠 영역" }
+            ],
+            "widget": [
+                { depth1: "W1. 플로팅 AI 위젯", depth2: "챗봇 메인 레이어", depth3: "자연어 Q&A 창", module: "공통 Core (전직원)", fid: "FN-WID-001, FN-WID-002", desc: "어느 화면에서나 우측 하단 고정 토글로 열리며, 실시간 답변을 제공하는 메인 위젯", mode: "우측 플로팅 레이어" },
+                { depth1: "W1. 플로팅 AI 위젯", depth2: "챗봇 메인 레이어", depth3: "출처 하이라이트 뷰어", module: "공통 Core (전직원)", fid: "FN-WID-003", desc: "답변 근거 문서 링크 클릭 시 포털 내부 전용 뷰어에서 원본 위치에 형광펜 처리", mode: "모달/임베드 뷰어" },
+                { depth1: "W1. 플로팅 AI 위젯", depth2: "챗봇 메인 레이어", depth3: "컨텍스트 파일 드롭존", module: "공통 Core (전직원)", fid: "FN-WID-004", desc: "내 PC의 파일을 챗봇으로 드롭하여 해당 임시 컨텍스트 범위 내 한정 쿼리 오토 빌딩", mode: "대화창 내 Drop Zone" }
+            ],
+            "admin": [
+                { depth1: "A1. 시스템 관리", depth2: "대시보드", depth3: "이용 통계 & 트래픽", module: "공통 Core (마스터)", fid: "FN-ADM-001", desc: "전사 임직원의 AI 사용량 추이, 인기 검색 키워드 빅데이터 분석 및 인프라 상태 모니터링", mode: "관리자 메인" },
+                { depth1: "A1. 시스템 관리", depth2: "기능 활성화 관리", depth3: "플러그인 토글(Toggle)", module: "공통 Core (마스터)", fid: "FN-ADM-002", desc: "수익 모델에 맞게 모듈 A~D를 스위치 제어로 켜고 끄며 일반 유저 UI와 결합", mode: "관리자 메인" },
+                { depth1: "A2. 커넥터 관리", depth2: "외부 저장소 연동", depth3: "채널 API 토큰 관리", module: "Module A (선택)", fid: "FN-CON-001", desc: "Google Drive, Slack, Notion, 사내 NAS 등의 외부 API OAuth 토큰 설정 및 동기화 스케줄링", mode: "관리자 서브" },
+                { depth1: "A3. 엔터프라이즈 보안", depth2: "데이터 보안", depth3: "실시간 마스킹 규칙", module: "공통 Core (마스터)", fid: "FN-ADM-003", desc: "LLM 전송 전 주민번호, 연봉 등 사내 개인정보 유출을 정규식으로 차단", mode: "관리자 서브" },
+                { depth1: "A3. 엔터프라이즈 보안", depth2: "감사/로그", depth3: "AI 감사 로그 조회", module: "공통 Core (마스터)", fid: "FN-ADM-004", desc: "누가 어떤 근거 문서로 질문을 전송했는지 실시간 IP 기반 추적 및 파일 제공", mode: "관리자 서브" },
+                { depth1: "A3. 엔터프라이즈 보안", depth2: "권한 관리", depth3: "기본 ACL 접근 제어 설정", module: "공통 Core (마스터)", fid: "FN-ADM-005", desc: "관리자가 부서/직급별 문서 열람 권한을 수동으로 설정하여 AI 검색 범위를 통제", mode: "관리자 서브" },
+                { depth1: "A4. 사용자 관리", depth2: "조직도 관리", depth3: "부서 트리 설정", module: "공통 Core (마스터)", fid: "FN-USR-001", desc: "사내 부서 구조를 시각적으로 편집하거나 인사 DB 연동으로 오토 동기화 진행", mode: "관리자 서브" },
+                { depth1: "A4. 사용자 관리", depth2: "사원 목록", depth3: "임직원 계정 제어", module: "공통 Core (마스터)", fid: "FN-USR-002, FN-USR-003", desc: "퇴사자 계정 즉시 비활성화 처리 및 부서 이동 시 실시간 AI 사용 등급 매핑 컨트롤", mode: "관리자 서브" },
+                { depth1: "A5. 보안 거버넌스", depth2: "외부 권한 자동화", depth3: "외부 ACL 실시간 동기화", module: "Module C (보안/선택)", fid: "FN-GOV-001", desc: "외부 시스템(Google Drive, Slack 등)의 공유 권한을 자동 동기화하고 동적 정책 엔진으로 검색 통제권을 자동화", mode: "관리자 서브" }
+            ]
+        };
+
+        const codeGuideDatabase = {
+            "PTL": {
+                icon: '<i class="fa-solid fa-house-user"></i>',
+                title: "FN-PTL (Portal Home)",
+                desc: "로그인 시 최초로 사용자가 보게 되는 사내 정보 및 AI 업무 브리핑 대시보드 영역을 제어합니다. 사용자가 기존 지식을 찾아가기 전, AI가 전날까지의 중요 변동점과 업무 핵심을 요약 제시하여 시각적이고 직관적인 업무 탐색을 돕는 '진입 지점'입니다.",
+                fids: ["FN-PTL-001"]
+            },
+            "STR": {
+                icon: '<i class="fa-solid fa-folder-tree"></i>',
+                title: "FN-STR (Storage)",
+                desc: "사내 정형/비정형 문서 데이터를 수집, 파싱하고 벡터 DB에 저장하여 AI가 검색할 수 있도록 구조화하는 지식 인덱서 저장소 설계 코드입니다. 트리 구조 파일 탐색기 및 오토 메타데이터 카테고리 분류가 여기에 해당합니다.",
+                fids: ["FN-STR-001", "FN-STR-002"]
+            },
+            "MNL": {
+                icon: '<i class="fa-solid fa-wand-magic-sparkles"></i>',
+                title: "FN-MNL (Manual)",
+                desc: "수집된 지식 자산을 정제, 가공하여 2차 문서(FAQ, 매뉴얼)로 역발행하거나 신규 입사자 교육 로드맵으로 변환하는 지식 자산 확대용 핵심 모듈 코드입니다. 챗봇과의 뛰어난 대화가 버튼 한 번으로 실시간 매뉴얼 아카이브에 기속되는 피드백 선순환 구조를 구현합니다.",
+                fids: ["FN-MNL-001"]
+            },
+            "WID": {
+                icon: '<i class="fa-solid fa-comment-dots"></i>',
+                title: "FN-WID (Widget)",
+                desc: "서비스 모든 페이지 우측 하단에 고정되어 레이어(Layer)로 상시 대기하는 플로팅 자연어 Q&A 위젯을 설계하는 최고 중요 규칙입니다. 출처 하이라이트 매칭, 임시 드롭 존 검색, 온오프 에이전트 연동 액션(연차/회의실 결재)을 모두 위젯 내에서 대행 제어합니다.",
+                fids: ["FN-WID-001", "FN-WID-002", "FN-WID-003", "FN-WID-004", "FN-WID-005", "FN-WID-006"]
+            },
+            "CON": {
+                icon: '<i class="fa-solid fa-plug"></i>',
+                title: "FN-CON (Connector)",
+                desc: "기존 사내 레거시 및 외부 클라우드 드라이브(Google Drive, Slack, 사내 NAS)와의 실시간 API 동기화 백엔드 연동 모듈 코드입니다.",
+                fids: ["FN-CON-001"]
+            },
+            "USR": {
+                icon: '<i class="fa-solid fa-users"></i>',
+                title: "FN-USR (User Management)",
+                desc: "조직도 트리 구조 편집과 사원 부서/직급 계정 제어를 제어합니다. 인사 시스템과 연동되어 부서 변경 시 실시간으로 AI 챗봇의 검색 범위를 동적으로 변경시키는 통제 계층입니다.",
+                fids: ["FN-USR-001", "FN-USR-002", "FN-USR-003"]
+            },
+            "ADM": {
+                icon: '<i class="fa-solid fa-shield-halved"></i>',
+                title: "FN-ADM (Admin & Security)",
+                desc: "시스템 관리(대시보드, 모듈 토글)와 엔터프라이즈 보안(기본 ACL 권한 관리, 데이터 마스킹, 감사 로그)을 포괄하는 관리자 전용 코어 모듈입니다. 모듀 라이선스에 기본 제공되는 필수 인프라 기능입니다.",
+                fids: ["FN-ADM-001", "FN-ADM-002", "FN-ADM-003", "FN-ADM-004", "FN-ADM-005"]
+            },
+            "GOV": {
+                icon: '<i class="fa-solid fa-gavel"></i>',
+                title: "FN-GOV (Governance)",
+                desc: "외부 시스템(Google Drive, Slack 등)의 공유 권한을 자동 동기화하고, 기업 규정 기반 동적 정책 엔진을 적용하여 AI 검색 범위를 자동으로 통제하는 고도화 보안 거버넌스 모듈(Module C)입니다.",
+                fids: ["FN-GOV-001"]
+            }
+        };
+
+        let activeIATab = 'user';
+
+        // Architecture flow connector engine with HTML label overlay
+        function drawAllConnectors() {
+            const svg = document.getElementById('flow-svg-canvas');
+            const labelsContainer = document.getElementById('flow-labels-container');
+            if (!svg) return;
+            svg.innerHTML = '';
+            if (labelsContainer) labelsContainer.innerHTML = '';
+
+            const canvasRect = document.getElementById('arch-canvas').getBoundingClientRect();
+
+            function getCoords(id, edge) {
+                const el = document.getElementById(id);
+                if (!el || el.offsetParent === null) return null;
+                const rect = el.getBoundingClientRect();
+                const x_left = rect.left - canvasRect.left;
+                const x_right = rect.right - canvasRect.left;
+                const x_center = x_left + rect.width / 2;
+                const y_top = rect.top - canvasRect.top;
+                const y_bottom = rect.bottom - canvasRect.top;
+                const y_center = y_top + rect.height / 2;
+
+                if (edge === 'right') return { x: x_right, y: y_center };
+                if (edge === 'left') return { x: x_left, y: y_center };
+                if (edge === 'top') return { x: x_center, y: y_top };
+                if (edge === 'bottom') return { x: x_center, y: y_bottom };
+                return { x: x_center, y: y_center };
+            }
+
+            function createMarker(color) {
+                const id = 'arr-' + color.replace('#', '');
+                if (svg.querySelector('#' + id)) return id;
+                let defs = svg.querySelector('defs');
+                if (!defs) { defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs'); svg.appendChild(defs); }
+                const m = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+                m.setAttribute('id', id); m.setAttribute('viewBox', '0 0 10 10');
+                m.setAttribute('refX', '9'); m.setAttribute('refY', '5');
+                m.setAttribute('markerWidth', '7'); m.setAttribute('markerHeight', '7');
+                m.setAttribute('orient', 'auto-start-reverse');
+                const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                p.setAttribute('d', 'M 0 1 L 10 5 L 0 9 z'); p.setAttribute('fill', color);
+                m.appendChild(p); defs.appendChild(m);
+                return id;
+            }
+
+            function drawLine(d, color, opacity, isDashed) {
+                const mid = createMarker(color);
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', d);
+                path.setAttribute('stroke', color);
+                path.setAttribute('stroke-width', '2.5');
+                path.setAttribute('fill', 'none');
+                path.setAttribute('opacity', opacity);
+                path.setAttribute('marker-end', `url(#${mid})`);
+                path.classList.add('flow-line');
+                if (isDashed) path.setAttribute('stroke-dasharray', '6, 4');
+                svg.appendChild(path);
+            }
+
+            function addLabel(x, y, text, color, opacity) {
+                if (!labelsContainer || opacity === '0.15') return;
+                const label = document.createElement('div');
+                // Removed y-offset margin to vertically center label exactly on the line
+                label.style.cssText = `position:absolute;left:${x}px;top:${y}px;transform:translate(-50%,-50%);
+                    background:rgba(9,13,22,0.92);color:${color};font-size:14.5px;font-weight:700;
+                    padding:3px 10px;border-radius:6px;border:1px solid ${color}40;white-space:nowrap;
+                    pointer-events:none;letter-spacing:0.3px;`;
+                label.textContent = text;
+                labelsContainer.appendChild(label);
+            }
+
+            const modA = document.getElementById('toggle-modA').checked;
+            const modB = document.getElementById('toggle-modB').checked;
+            const modC = document.getElementById('toggle-modC').checked;
+
+            // === 1. START → M1 ===
+            const pStart = getCoords('btn-start', 'bottom');
+            const pM1 = getCoords('card-m1', 'top');
+            if (pStart && pM1) {
+                drawLine(`M ${pStart.x} ${pStart.y} L ${pM1.x} ${pM1.y}`, '#10b981', '1.0', false);
+                addLabel((pStart.x + pM1.x) / 2, (pStart.y + pM1.y) / 2, '홈 진입', '#10b981', '1.0');
+            }
+
+            // === 2. M1 → M2 ===
+            const pM1r = getCoords('card-m1', 'right');
+            const pM2l = getCoords('card-m2', 'left');
+            if (pM1r && pM2l) {
+                drawLine(`M ${pM1r.x} ${pM1r.y} L ${pM2l.x} ${pM2l.y}`, '#3b82f6', '1.0', false);
+                addLabel((pM1r.x + pM2l.x) / 2, pM1r.y, '지식 탐색', '#3b82f6', '1.0');
+            }
+
+            // === 3. M2 → M3 ===
+            const pM2r = getCoords('card-m2', 'right');
+            const pM3l = getCoords('card-m3', 'left');
+            if (pM2r && pM3l) {
+                const op = modB ? '1.0' : '0.15';
+                drawLine(`M ${pM2r.x} ${pM2r.y} L ${pM3l.x} ${pM3l.y}`, '#14b8a6', op, false);
+                addLabel((pM2r.x + pM3l.x) / 2, pM2r.y, '온보딩 연동', '#14b8a6', op);
+            }
+
+            // === 4. M3 → W1 (straight horizontal to widget left, at M3 center height) ===
+            const pM3r = getCoords('card-m3', 'right');
+            const pW1l = getCoords('card-w1', 'left');
+            if (pM3r && pW1l) {
+                const op = modB ? '1.0' : '0.15';
+                const lowerY = pM3r.y + 20;
+                drawLine(`M ${pM3r.x} ${lowerY} L ${pW1l.x} ${lowerY}`, '#14b8a6', op, false);
+                addLabel((pM3r.x + pW1l.x) / 2, lowerY, '매뉴얼 빌드', '#14b8a6', op);
+            }
+
+            // === 5. M2 → W1 (orthogonal L-route: down from M2, then right to W1) ===
+            const pM2b = getCoords('card-m2', 'bottom');
+            const pModAt = getCoords('card-modA', 'top');
+            if (pM2b && pW1l && pModAt) {
+                // Route through the exact middle of the gap between M-row and Module-row, aligning with 파싱 동기화
+                const gapY = (pM2b.y + pModAt.y) / 2;
+                const d = `M ${pM2b.x} ${pM2b.y} L ${pM2b.x} ${gapY} L ${pW1l.x} ${gapY}`;
+                drawLine(d, '#3b82f6', '1.0', false);
+                addLabel((pM2b.x + pW1l.x) / 2, gapY, 'RAG 검색 요청', '#3b82f6', '1.0');
+            }
+
+            // === 6. Module A → M2 (vertical up) ===
+            if (pModAt && pM2b) {
+                const op = modA ? '1.0' : '0.15';
+                const startX = pModAt.x - 30;
+                const endX = pM2b.x - 30;
+                const midY2 = (pModAt.y + pM2b.y) / 2;
+                // Orthogonal L-route
+                const d = `M ${startX} ${pModAt.y} L ${startX} ${midY2} L ${endX} ${midY2} L ${endX} ${pM2b.y}`;
+                drawLine(d, '#a3e635', op, false);
+                addLabel((startX + endX) / 2, midY2, '파싱 동기화', '#a3e635', op);
+            }
+
+            // === 7. W1 → M3 (FAQ loopback, dashed) ===
+            if (pM3r && pW1l) {
+                const op = modB ? '1.0' : '0.15';
+                const upperY = pM3r.y - 20;
+                // Route: direct horizontal straight line from W1 left to M3 right
+                const d = `M ${pW1l.x} ${upperY} L ${pM3r.x} ${upperY}`;
+                drawLine(d, '#14b8a6', op, true);
+                addLabel((pW1l.x + pM3r.x) / 2, upperY, 'FAQ 역발행', '#14b8a6', op);
+            }
+
+            // === 8. A3 Core Sec → W1 (security control, dashed) ===
+            const pCoreSecR = getCoords('card-core-sec', 'right');
+            if (pCoreSecR && pW1l) {
+                const op = '1.0';
+                drawLine(`M ${pCoreSecR.x} ${pCoreSecR.y} L ${pW1l.x} ${pCoreSecR.y}`, '#3b82f6', op, true);
+                addLabel((pCoreSecR.x + pW1l.x) / 2, pCoreSecR.y, '마스킹 통제', '#3b82f6', op);
+            }
+
+            // === Dynamically Resize Admin View to match M2's right edge (stable, unlike A3 which scales) ===
+            const adminCard = document.getElementById('card-admin');
+            const m2Card = document.getElementById('card-m2');
+            if (adminCard && m2Card) {
+                const m2Rect = m2Card.getBoundingClientRect();
+                const adminParentRect = adminCard.parentElement.getBoundingClientRect();
+                // width = (M2's right edge) - (Admin parent's left edge)
+                const newWidth = m2Rect.right - adminParentRect.left;
+                adminCard.style.width = newWidth + 'px';
+            }
+
+            // === 9. Admin View → W1 Security Info (security policy sync, dashed) ===
+            const pAdminR = getCoords('card-admin', 'right');
+            const pSecL = getCoords('widget-security-info', 'left');
+            // pW1l is already defined in step 5, so we can just use it directly!
+            if (pAdminR && pSecL && pW1l) {
+                const startX = pAdminR.x;
+                // Force starting Y to perfectly match destination Y for a straight horizontal line
+                const startY = pSecL.y;
+                const endX = pW1l.x - 5; // Stop before card-w1's outer edge to show arrow
+                const endY = pSecL.y;
+
+                const d = `M ${startX} ${startY} L ${endX} ${endY}`;
+
+                // Draw a blue dashed line
+                drawLine(d, '#3b82f6', '1.0', true);
+                addLabel((startX + endX) / 2, startY, '통합 보안 정책 실시간 적용', '#3b82f6', '1.0');
+            }
+
+            // === 10. A5 (Module C) → Admin View (ACL Sync, dashed vertical) ===
+            const pModCb = getCoords('card-modC', 'bottom');
+            const pAdminTop = getCoords('card-admin', 'top');
+            if (pModCb && pAdminTop) {
+                const op = modC ? '1.0' : '0.15';
+                const startX = pModCb.x; // Center of A5
+                const startY = pModCb.y; // Bottom of A5
+                const endX = pAdminTop.x; // Center of Admin View
+                const endY = pAdminTop.y; // Top of Admin View
+
+                const midY = (startY + endY) / 2;
+
+                // 꺾은선 (Z-shape) from A5 bottom center to Admin View top center
+                const d = `M ${startX} ${startY} L ${startX} ${midY} L ${endX} ${midY} L ${endX} ${endY}`;
+                drawLine(d, '#a855f7', op, true);
+                addLabel((startX + endX) / 2, midY, 'ACL 정책 동기화', '#a855f7', op);
+            }
+
+            // === 11. A3 Core Sec → Admin View (Auth & Audit Log, dashed) ===
+            const pCoreSecB = getCoords('card-core-sec', 'bottom');
+            const pAdminR2 = getCoords('card-admin', 'right');
+            if (pCoreSecB && pAdminR2) {
+                const startX = pCoreSecB.x;
+                const startY = pCoreSecB.y;
+                const endX = pAdminR2.x;
+                const endY = pAdminR2.y - 20; // Connect slightly above the center of the right edge
+
+                // L-shape: down from A3 bottom, then left to Admin view right
+                const d = `M ${startX} ${startY} L ${startX} ${endY} L ${endX} ${endY}`;
+                drawLine(d, '#3b82f6', '1.0', true);
+
+                // Label placed on the vertical segment
+                addLabel(startX, (startY + endY) / 2, '기본 권한/감사 로그 연동', '#3b82f6', '1.0');
+            }
+
+            // === 12. A5 (Module C) → A2 (Module A) (External ACL Mapping) ===
+            const pModCL = getCoords('card-modC', 'left');
+            const pModAR = getCoords('card-modA', 'right');
+            if (pModCL && pModAR) {
+                const op = (modC && modA) ? '1.0' : '0.15';
+                const d = `M ${pModCL.x} ${pModCL.y} L ${pModAR.x} ${pModCL.y}`; // Horizontal line from A5 left to A2 right
+                drawLine(d, '#a855f7', op, true);
+                addLabel((pModCL.x + pModAR.x) / 2, pModCL.y, '외부 권한 매핑', '#a855f7', op);
+            }
+        }
+
+        function changeSlide(slideNum) {
+            if (slideNum < 1 || slideNum > totalSlides) return;
+
+            const prevPane = document.getElementById(`slide-${currentSlide}`);
+            prevPane.classList.remove('translate-x-0', 'opacity-100');
+            prevPane.classList.add('opacity-0');
+
+            if (slideNum > currentSlide) {
+                prevPane.classList.add('-translate-x-full');
+                prevPane.classList.remove('translate-x-full');
+            } else {
+                prevPane.classList.add('translate-x-full');
+                prevPane.classList.remove('-translate-x-full');
+            }
+
+            const nextPane = document.getElementById(`slide-${slideNum}`);
+            nextPane.classList.remove('translate-x-full', '-translate-x-full', 'opacity-0');
+            nextPane.classList.add('translate-x-0', 'opacity-100');
+
+            // Update Slide indicators
+            for (let i = 1; i <= totalSlides; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                const tab = document.getElementById(`tab-${i}`);
+                if (i === slideNum) {
+                    dot.className = "slide-dot h-2.5 w-8 bg-blue-600 rounded-full transition-all duration-300 cursor-pointer";
+                    if (tab) {
+                        tab.className = "slide-tab px-5 py-2.5 rounded-xl font-bold text-base transition-all bg-blue-600 text-white shadow-md";
+                    }
+                } else {
+                    dot.className = "slide-dot h-2.5 w-2.5 bg-slate-800 rounded-full hover:bg-slate-700 transition-all duration-300 cursor-pointer";
+                    if (tab) {
+                        tab.className = "slide-tab px-5 py-2.5 rounded-xl font-bold transition-all text-slate-400 hover:text-slate-200";
+                    }
+                }
+            }
+
+            currentSlide = slideNum;
+            document.getElementById('current-slide-num').innerText = currentSlide;
+
+            // Trigger real-time redraw of connecting flows when Slide 2 renders
+            if (currentSlide === 2) {
+                setTimeout(drawAllConnectors, 20);
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                changeSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                changeSlide(currentSlide - 1);
+            }
+        }
+
+        // Slide 2: Interactive Toggle Controls
+        function applyLicense(tier) {
+            const modA = document.getElementById('toggle-modA');
+            const modB = document.getElementById('toggle-modB');
+            const modC = document.getElementById('toggle-modC');
+            const modD = document.getElementById('toggle-modD');
+
+            switch (tier) {
+                case 'trial':
+                    modA.checked = false; modB.checked = false; modC.checked = false; modD.checked = false;
+                    break;
+                case 'basic':
+                    modA.checked = false; modB.checked = true; modC.checked = false; modD.checked = false;
+                    break;
+                case 'integrated':
+                    modA.checked = true; modB.checked = true; modC.checked = false; modD.checked = false;
+                    break;
+                case 'full':
+                    modA.checked = true; modB.checked = true; modC.checked = true; modD.checked = true;
+                    break;
+            }
+
+            // Update preset button styles
+            document.querySelectorAll('.license-preset-btn').forEach(btn => {
+                if (btn.dataset.tier === tier) {
+                    btn.classList.add('bg-blue-600', 'text-white');
+                    btn.classList.remove('text-slate-400', 'hover:bg-slate-800');
+                } else {
+                    btn.classList.remove('bg-blue-600', 'text-white');
+                    btn.classList.add('text-slate-400', 'hover:bg-slate-800');
+                }
+            });
+
+            updateInteractiveMap();
+        }
+
+        function updateInteractiveMap() {
+            const modA_active = document.getElementById('toggle-modA').checked;
+            const modB_active = document.getElementById('toggle-modB').checked;
+            const modC_active = document.getElementById('toggle-modC').checked;
+            const modD_active = document.getElementById('toggle-modD').checked;
+
+            const cardA = document.getElementById('card-modA');
+            if (modA_active) {
+                cardA.style.opacity = "1";
+                cardA.style.transform = "scale(1)";
+                cardA.style.pointerEvents = "auto";
+            } else {
+                cardA.style.opacity = "0.15";
+                cardA.style.transform = "scale(0.97)";
+                cardA.style.pointerEvents = "none";
+            }
+
+            const cardB = document.getElementById('card-m3');
+            const subcardB = document.getElementById('subcard-modB');
+            if (modB_active) {
+                cardB.style.opacity = "1";
+                cardB.style.transform = "scale(1)";
+                cardB.style.pointerEvents = "auto";
+                subcardB.style.opacity = "1";
+                subcardB.style.pointerEvents = "auto";
+            } else {
+                cardB.style.opacity = "0.15";
+                cardB.style.transform = "scale(0.97)";
+                cardB.style.pointerEvents = "none";
+                subcardB.style.opacity = "0.15";
+                subcardB.style.pointerEvents = "none";
+            }
+
+            const cardC = document.getElementById('card-modC');
+            const adminText = document.getElementById('admin-security-text');
+            const adminMaskingAudit = document.getElementById('admin-masking-audit');
+            if (modC_active) {
+                cardC.style.opacity = "1";
+                cardC.style.transform = "scale(1)";
+                cardC.style.pointerEvents = "auto";
+                if (adminText) adminText.style.opacity = "1";
+                if (adminMaskingAudit) adminMaskingAudit.style.opacity = "1";
+            } else {
+                cardC.style.opacity = "0.15";
+                cardC.style.transform = "scale(0.97)";
+                cardC.style.pointerEvents = "none";
+                if (adminText) adminText.style.opacity = "0.15";
+                if (adminMaskingAudit) adminMaskingAudit.style.opacity = "0.3";
+            }
+
+            const subcardD = document.getElementById('subcard-modD');
+            if (modD_active) {
+                subcardD.style.opacity = "1";
+                subcardD.style.pointerEvents = "auto";
+            } else {
+                subcardD.style.opacity = "0.15";
+                subcardD.style.pointerEvents = "none";
+            }
+
+            // Real-time recalculation of curve paths on toggle shifts
+            drawAllConnectors();
+        }
+
+        // Slide 3: Interactive Naming Code Handler
+        function selectCodeGuide(code) {
+            const data = codeGuideDatabase[code];
+            if (!data) return;
+
+            // Remove active style from all buttons
+            document.querySelectorAll('.guide-btn').forEach(btn => {
+                btn.classList.remove('border-blue-500', 'bg-blue-950/20');
+                btn.classList.add('border-slate-800', 'bg-slate-900/50');
+            });
+
+            // Add active style to selected button
+            const activeBtn = document.getElementById(`btn-guide-${code}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('border-slate-800', 'bg-slate-900/50');
+                activeBtn.classList.add('border-blue-500', 'bg-blue-950/20');
+            }
+
+            // Update details view
+            document.getElementById('guide-icon').innerHTML = data.icon;
+            document.getElementById('guide-title').innerText = data.title;
+            document.getElementById('guide-desc').innerText = data.desc;
+
+            // Render mapped FIDs as badges with module-specific colors
+            const listContainer = document.getElementById('guide-fid-list');
+            listContainer.innerHTML = '';
+
+            // Module color mapping for FID badges
+            const fidColorMap = {
+                'FN-CON-001': { bg: 'bg-lime-500/10', text: 'text-lime-400', border: 'border-lime-500/20' },
+                'FN-MNL-001': { bg: 'bg-teal-500/10', text: 'text-teal-400', border: 'border-teal-500/20' },
+                'FN-WID-005': { bg: 'bg-teal-500/10', text: 'text-teal-400', border: 'border-teal-500/20' },
+                'FN-WID-006': { bg: 'bg-amber-500/10', text: 'text-amber-400', border: 'border-amber-500/20' },
+                'FN-GOV-001': { bg: 'bg-purple-500/10', text: 'text-purple-400', border: 'border-purple-500/20' }
+            };
+            const defaultColor = { bg: 'bg-blue-500/10', text: 'text-blue-400', border: 'border-blue-500/20' };
+
+            data.fids.forEach(fid => {
+                const colors = fidColorMap[fid] || defaultColor;
+                const badge = document.createElement('span');
+                badge.className = `text-sm ${colors.bg} ${colors.text} font-mono font-bold px-4 py-2 rounded-xl border ${colors.border} shadow-sm`;
+                badge.innerText = fid;
+                listContainer.appendChild(badge);
+            });
+        }
+
+        // Slide 5: IA Database Tab Switcher
+        function switchIAMapTab(tab) {
+            activeIATab = tab;
+
+            // Toggle active style on buttons
+            const tabs = ['user', 'widget', 'admin'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`ia-tab-${t}`);
+                if (t === tab) {
+                    btn.className = "px-5 py-2.5 text-sm font-extrabold rounded-lg transition-all bg-blue-600 text-white shadow-md";
+                } else {
+                    btn.className = "px-5 py-2.5 text-sm font-extrabold rounded-lg transition-all text-slate-400 hover:text-slate-200";
+                }
+            });
+
+            renderIAMasterTable();
+        }
+
+        function renderIAMasterTable() {
+            const tbody = document.getElementById('ia-table-body');
+            tbody.innerHTML = '';
+
+            const list = iaMasterDatabase[activeIATab];
+            list.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-900/40 transition-colors";
+
+                // Styling Module Tags based on Type
+                let moduleTag = `<span class="text-xs bg-slate-800 text-slate-300 font-bold px-2.5 py-1.5 rounded border border-slate-700">${row.module}</span>`;
+                if (row.module.includes("Core")) {
+                    moduleTag = `<span class="text-xs bg-blue-500/10 text-blue-400 font-bold px-2.5 py-1.5 rounded border border-blue-500/20">${row.module}</span>`;
+                } else if (row.module.includes("B")) {
+                    moduleTag = `<span class="text-xs bg-teal-500/10 text-teal-400 font-bold px-2.5 py-1.5 rounded border border-teal-500/20">${row.module}</span>`;
+                } else if (row.module.includes("C")) {
+                    moduleTag = `<span class="text-xs bg-purple-500/10 text-purple-400 font-bold px-2.5 py-1.5 rounded border border-purple-500/20">${row.module}</span>`;
+                } else if (row.module.includes("D")) {
+                    moduleTag = `<span class="text-xs bg-amber-500/10 text-amber-400 font-bold px-2.5 py-1.5 rounded border border-amber-500/20">${row.module}</span>`;
+                } else if (row.module.includes("A")) {
+                    moduleTag = `<span class="text-xs bg-lime-500/10 text-lime-400 font-bold px-2.5 py-1.5 rounded border border-lime-500/20">${row.module}</span>`;
+                }
+
+                tr.innerHTML = `
+                    <td class="p-4 font-bold text-slate-200">${row.depth1}</td>
+                    <td class="p-4 text-slate-300 font-semibold">${row.depth2}</td>
+                    <td class="p-4 text-slate-400 font-medium">${row.depth3}</td>
+                    <td class="p-4">${moduleTag}</td>
+                    <td class="p-4 font-mono text-sm font-bold text-blue-400">${row.fid}</td>
+                    <td class="p-4">
+                        <div class="text-slate-200 leading-normal font-medium">${row.desc}</div>
+                        <div class="text-xs text-slate-500 mt-2 font-bold"><i class="fa-solid fa-desktop mr-1.5"></i> 출력 유형: ${row.mode}</div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Slide 5: Master Live Search
+        function searchIAMap() {
+            const query = document.getElementById('ia-search-input').value.toLowerCase();
+            const rows = document.querySelectorAll('#ia-table-body tr');
+
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                if (text.includes(query)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
+
+        // Fullscreen Feature Handler
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    alert(`전체화면 전환 중 에러가 발생했습니다: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        // Keyboard arrow navigation support
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'ArrowRight' || event.key === 'Space') {
+                nextSlide();
+            } else if (event.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+
+        // Trigger dynamic resizing on resolution shifts to adapt svg coordinates
+        window.addEventListener('resize', () => {
+            if (currentSlide === 2) {
+                drawAllConnectors();
+            }
+        });
+
+        // Initialize Master System Load State
+        window.onload = function () {
+            updateInteractiveMap();
+            selectCodeGuide('PTL');
+            renderIAMasterTable();
+        }
+    </script>
+</body>
+
+</html>

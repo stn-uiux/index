@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qrayon - 멀티에이전트 협업형 지식관리 시스템 기획안</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for beautiful icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter & Pretendard alternative -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap"
+        rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans KR', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f3ff',
+                            100: '#e1e7ff',
+                            200: '#cbd5ff',
+                            300: '#a8baff',
+                            400: '#8196ff',
+                            500: '#5c6cfa',
+                            600: '#474ceb',
+                            700: '#3a3acf',
+                            800: '#3232a8',
+                            900: '#2b2c85',
+                            accent: '#6366f1',
+                            purple: '#8b5cf6',
+                            cyber: '#06b6d4'
+                        }
+                    },
+                    animation: {
+                        'float-gentle': 'floatGentle 4s ease-in-out infinite',
+                        'float-delayed': 'floatDelayed 5s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
+                        'spin-slow': 'spin 15s linear infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes floatGentle {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-10px) rotate(2deg);
+            }
+        }
+
+        @keyframes floatDelayed {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-12px) rotate(-2deg);
+            }
+        }
+
+        @keyframes pulseGlow {
+
+            0%,
+            100% {
+                opacity: 0.6;
+                filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.4));
+            }
+
+            50% {
+                opacity: 1;
+                filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.8));
+            }
+        }
+
+        /* Slide transitions */
+        .slide {
+            transition: opacity 0.5s ease-in-out, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(50px);
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateX(0);
+        }
+
+        .slide.prev {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(-50px);
+        }
+
+        /* Glassmorphism effects */
+        .glass {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .glass-dark {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.2);
+            border-radius: 999px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.5);
+        }
+
+        /* Lightbox Modal */
+        .lightbox-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+
+        .lightbox-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .lightbox-overlay img {
+            max-width: 90vw;
+            max-height: 88vh;
+            border-radius: 16px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+            transform: scale(0.85);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .lightbox-overlay.active img {
+            transform: scale(1);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 24px;
+            right: 32px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .thumbnail-clickable {
+            cursor: zoom-in;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 font-sans overflow-hidden h-screen w-screen select-none">
+
+    <!-- Lightbox Modal Overlay -->
+    <div class="lightbox-overlay" id="lightbox-overlay" onclick="closeLightbox(event)">
+        <button class="lightbox-close" onclick="closeLightbox(event)" title="닫기">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <img id="lightbox-img" src="" alt="Enlarged preview">
+    </div>
+
+    <!-- Presentation Header -->
+    <header
+        class="fixed top-0 left-0 right-0 h-16 z-50 flex items-center justify-between px-6 bg-white/70 backdrop-blur-md border-b border-slate-100">
+        <div class="flex items-center space-x-3">
+            <img src="qrayon/Qrayon_light.png" alt="Qrayon Logo" class="h-8 object-contain"
+                onerror="this.src='Qrayon_light.png'">
+            <span
+                class="text-xs bg-brand-100 text-brand-700 px-2 py-1 rounded-full font-semibold uppercase tracking-wider">기획안
+                V0.5</span>
+        </div>
+        <div class="text-xs text-slate-400 font-medium tracking-wide hidden md:block">
+            유기적 멀티에이전트 지식관리 시스템
+        </div>
+        <div class="flex items-center space-x-4">
+            <!-- Fullscreen Button -->
+            <button onclick="toggleFullScreen()"
+                class="text-slate-500 hover:text-brand-600 transition p-2 rounded-full hover:bg-slate-100" title="전체화면">
+                <i class="fa-solid fa-expand text-lg"></i>
+            </button>
+            <div
+                class="flex items-center space-x-1 bg-slate-100 rounded-full px-3 py-1.5 text-xs text-slate-600 font-bold">
+                <span id="current-index">1</span>
+                <span class="text-slate-400">/</span>
+                <span id="total-slides">8</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Slides Main Viewport -->
+    <main
+        class="relative h-full w-full pt-16 pb-16 overflow-hidden bg-gradient-to-tr from-brand-50 via-slate-50 to-purple-50">
+
+        <!-- Slide 1: Cover (Executive Summary) -->
+        <section class="slide active flex items-center justify-center p-6 md:p-12" id="slide-1">
+            <div class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <!-- Cover Text -->
+                <div class="lg:col-span-7 space-y-6 text-left">
+                    <div
+                        class="inline-flex items-center space-x-2 bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-bold">
+                        <i class="fa-solid fa-star-of-life animate-spin-slow"></i>
+                        <span>AI 협업 패러다임의 혁신</span>
+                    </div>
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 leading-tight">
+                        직원 한 명이<br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-purple-600">하나의
+                            군단(Team)</span>이<br>
+                        되는 경험, <span class="border-b-4 border-brand-300">큐레이온</span>
+                    </h1>
+                    <p class="text-slate-600 text-lg max-w-xl">
+                        자율 분산형 5대 AI 에이전트가 가상 스테이지 위에서 협업하고 교차 검증하는 차세대 기업형 지식관리 시스템(KMS) 제안서.
+                    </p>
+                    <div class="pt-4 flex flex-wrap gap-3">
+                        <span
+                            class="bg-white/80 shadow-sm border border-slate-100 rounded-xl px-4 py-2.5 flex items-center space-x-2 text-sm text-slate-700">
+                            <i class="fa-solid fa-microchip text-brand-500"></i>
+                            <span>Multi-Agent Orchestrator</span>
+                        </span>
+                        <span
+                            class="bg-white/80 shadow-sm border border-slate-100 rounded-xl px-4 py-2.5 flex items-center space-x-2 text-sm text-slate-700">
+                            <i class="fa-solid fa-shield-halved text-emerald-500"></i>
+                            <span>Enterprise Secure RAG</span>
+                        </span>
+                    </div>
+                </div>
+                <!-- Visual Interactive Showcase -->
+                <div class="lg:col-span-5 relative flex items-center justify-center">
+                    <div
+                        class="relative w-full max-w-sm aspect-square bg-gradient-to-b from-brand-100 to-transparent rounded-full flex items-center justify-center p-6">
+                        <!-- Simulated Podium Base -->
+                        <img src="AdobeStock_250156542.jpeg" alt="Stage Platform"
+                            class="absolute bottom-4 w-4/5 object-contain animate-pulse-glow"
+                            onerror="this.style.display='none'">
+                        <!-- Floating Agent Character -->
+                        <img src="AdobeStock_700998736.jpeg" alt="Qrayon Agent"
+                            class="w-2/3 object-contain z-10 animate-float-gentle drop-shadow-2xl"
+                            onerror="this.src='qrayon/02.png'">
+                        <!-- Soft UI Tooltip decoration -->
+                        <div
+                            class="absolute top-10 right-0 glass px-4 py-2.5 rounded-2xl shadow-lg z-20 text-xs font-bold border border-white flex items-center space-x-2 animate-bounce">
+                            <i class="fa-solid fa-check-circle text-emerald-500"></i>
+                            <span>업무 성공률 98% 달성!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 2: Market Analysis & Problem Definition -->
+        <section class="slide flex items-center justify-center p-6 md:p-12" id="slide-2">
+            <div class="max-w-6xl w-full space-y-8">
+                <div class="text-center space-y-2">
+                    <span class="text-xs font-bold text-brand-600 tracking-wider uppercase">Market Analysis</span>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900">시장의 문제점 및 새로운 기회 영역</h2>
+                    <p class="text-slate-500">왜 기존의 지식 관리 시스템과 단순 AI 챗봇으로는 해결이 불가능했을까요?</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+                    <!-- Pain Point 1 -->
+                    <div
+                        class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm hover:shadow-md transition duration-300 flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <div
+                                class="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-500 text-xl font-bold">
+                                01
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-950">정적이고 수동적인 KMS의 한계</h3>
+                            <p class="text-slate-500 text-sm leading-relaxed">
+                                노션, 콘플루언스 같은 전통 지식 창고는 직원들이 직접 분류하고 등록해야 하는 귀찮은 수작업이 수반되며 결국 죽은 문서 보관소로 전락합니다.
+                            </p>
+                        </div>
+                        <div
+                            class="mt-6 pt-4 border-t border-slate-100 text-amber-600 font-semibold text-xs flex items-center space-x-1">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                            <span>"기록만 되고 다시는 읽지 않는 무덤화"</span>
+                        </div>
+                    </div>
+
+                    <!-- Pain Point 2 -->
+                    <div
+                        class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm hover:shadow-md transition duration-300 flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <div
+                                class="w-12 h-12 rounded-2xl bg-rose-50 flex items-center justify-center text-rose-500 text-xl font-bold">
+                                02
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-950">외로운 단일 챗봇의 피로도</h3>
+                            <p class="text-slate-500 text-sm leading-relaxed">
+                                기존 LLM 서비스들은 1:1 대화창 형태로 제공됩니다. 대규모 기획이나 교차 검증 시 사용자가 프롬프트를 계속 입력하며 검증 역할을 떠안아야 하는 피로감이
+                                존재합니다.
+                            </p>
+                        </div>
+                        <div
+                            class="mt-6 pt-4 border-t border-slate-100 text-rose-600 font-semibold text-xs flex items-center space-x-1">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                            <span>"프롬프트 작성하느라 결국 내가 일한다"</span>
+                        </div>
+                    </div>
+
+                    <!-- Pain Point 3 -->
+                    <div
+                        class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm hover:shadow-md transition duration-300 flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <div
+                                class="w-12 h-12 rounded-2xl bg-brand-50 flex items-center justify-center text-brand-500 text-xl font-bold">
+                                03
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-950">비주얼 부재 및 몰입도 저하</h3>
+                            <p class="text-slate-500 text-sm leading-relaxed">
+                                가상 오피스, 게이미케이션이 부상하는 시대임에도 AI 솔루션들은 텍스트 기반 대화로 일관하여 에이전트의 구체적 작업 현황 파악이나 시각적 재미가 전무합니다.
+                            </p>
+                        </div>
+                        <div
+                            class="mt-6 pt-4 border-t border-slate-100 text-brand-600 font-semibold text-xs flex items-center space-x-1">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>큐레이온의 "원형 에이전트 스테이지"로 해결</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 3: Target Persona -->
+        <section class="slide flex items-center justify-center p-6 md:p-12" id="slide-3">
+            <div class="max-w-6xl w-full space-y-8">
+                <div class="text-center space-y-2">
+                    <span class="text-xs font-bold text-brand-600 tracking-wider uppercase">Target Audience</span>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900">큐레이온이 구원할 주요 고객 페르소나</h2>
+                    <p class="text-slate-500">인력 부족에 지친 스타트업 대표부터 정보 탐색에 시달리는 대기업 부서 책임자까지</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-4">
+                    <!-- Persona 1 -->
+                    <div
+                        class="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-sm flex flex-col justify-between space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <div
+                                class="bg-brand-100 text-brand-600 w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shrink-0">
+                                <i class="fa-solid fa-user-tie"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-slate-900">스타트업 & 중소기업 대표 (SME Founder)</h3>
+                                <p class="text-xs text-brand-500 font-semibold mt-1">"직원 한 명 채용도 부담스럽지만, 기획/리서치는 산더미
+                                    같습니다."</p>
+                            </div>
+                        </div>
+                        <div class="space-y-3 bg-slate-50 p-4 rounded-2xl text-sm text-slate-600">
+                            <div class="flex items-center space-x-2">
+                                <i class="fa-solid fa-triangle-exclamation text-amber-500 shrink-0"></i>
+                                <span><strong>Pain Point:</strong> 리서치, 마케팅 분석, 기획 초안을 일일이 아웃소싱하거나 본인이 직접 작성.</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <i class="fa-solid fa-wand-magic-sparkles text-brand-500 shrink-0"></i>
+                                <span><strong>Core Value:</strong> 단 1명의 리소스로 AI 에이전트 5명을 부리는 '풀스택 경영 부서' 확보.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Persona 2 -->
+                    <div
+                        class="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-sm flex flex-col justify-between space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <div
+                                class="bg-purple-100 text-purple-600 w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shrink-0">
+                                <i class="fa-solid fa-users-gear"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-slate-900">대기업/중견기업 부서 책임자 (Team Manager)</h3>
+                                <p class="text-xs text-purple-500 font-semibold mt-1">"부하 직원들에게 지시하기 전, 정확하고 검증된 고품질 보고서
+                                    초안이 급합니다."</p>
+                            </div>
+                        </div>
+                        <div class="space-y-3 bg-slate-50 p-4 rounded-2xl text-sm text-slate-600">
+                            <div class="flex items-center space-x-2">
+                                <i class="fa-solid fa-triangle-exclamation text-amber-500 shrink-0"></i>
+                                <span><strong>Pain Point:</strong> 사내 수만 건의 산재된 지식(RAG)의 파편화 및 실시간 최신 정보와의 크로스체킹
+                                    곤란.</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <i class="fa-solid fa-wand-magic-sparkles text-brand-500 shrink-0"></i>
+                                <span><strong>Core Value:</strong> 보안이 통제된 사내 데이터 베이스와 연동하여 에이전트들이 크로스체킹해주는 보고서 신속
+                                    구축.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: Competitor Benchmarking -->
+        <section class="slide flex items-center justify-center p-6 md:p-12" id="slide-4">
+            <div class="max-w-6xl w-full space-y-6">
+                <div class="text-center space-y-2">
+                    <span class="text-xs font-bold text-brand-600 tracking-wider uppercase">Competitive Landscape</span>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900">기존 솔루션 대비 차별화 포인트</h2>
+                    <p class="text-slate-500">정적인 지식 보관을 넘어, 스스로 움직이는 능동형 에이전트 협업 체계 구현</p>
+                </div>
+
+                <div class="overflow-x-auto rounded-3xl border border-slate-200 shadow-sm bg-white">
+                    <table class="w-full text-left border-collapse min-w-[700px]">
+                        <thead>
+                            <tr
+                                class="bg-slate-50/70 text-slate-400 text-xs font-bold uppercase tracking-wider border-b border-slate-200">
+                                <th class="py-4 px-6">핵심 비교 지표</th>
+                                <th class="py-4 px-6 text-slate-600">전통적 KMS (Notion / Wiki)</th>
+                                <th class="py-4 px-6 text-slate-600">일반 대형 언어 모델 (ChatGPT 등)</th>
+                                <th class="py-4 px-6 text-brand-600 bg-brand-50/50">큐레이온 (Qrayon)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-sm text-slate-600">
+                            <tr>
+                                <td class="py-4 px-6 font-bold text-slate-800">지식 축적 방식</td>
+                                <td class="py-4 px-6">수동 입력 및 정리 (사용자 의존)</td>
+                                <td class="py-4 px-6">일회성 지식 소모 (세션 종료 시 소멸)</td>
+                                <td class="py-4 px-6 bg-brand-50/20 font-semibold text-brand-700">지능적 자동 크롤링 & RAG 실시간
+                                    학습</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-6 font-bold text-slate-800">에이전트 자율 협업</td>
+                                <td class="py-4 px-6">불가능 (협업은 인간만 수행)</td>
+                                <td class="py-4 px-6">단일 채팅 세션 (단발적 수행)</td>
+                                <td class="py-4 px-6 bg-brand-50/20 font-semibold text-brand-700">5개 자율 에이전트 간 업무 병렬분할 및
+                                    크로스체킹</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-6 font-bold text-slate-800">시각적 인터렉션</td>
+                                <td class="py-4 px-6">정적 트리 구조, 텍스트 가득함</td>
+                                <td class="py-4 px-6">지루한 상하 스크롤 메신저 포맷</td>
+                                <td class="py-4 px-6 bg-brand-50/20 font-semibold text-brand-700">원형 메탈 스테이지 기반 3D 로봇
+                                    에이전트 및 툴팁 중계</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-6 font-bold text-slate-800">사내 데이터 연동 및 보안</td>
+                                <td class="py-4 px-6">자체 보관되나 AI 요약 분석 연계 약함</td>
+                                <td class="py-4 px-6">외부 유출 위험 및 학습 활용 한계</td>
+                                <td class="py-4 px-6 bg-brand-50/20 font-semibold text-brand-700">보안 격리 클라우드 / 전사 브리핑 자동
+                                    추출</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Slide 5: Visual walkthrough - Intro Screen (intro.jpg) -->
+        <section class="slide flex items-center justify-center p-6 md:p-12" id="slide-5">
+            <div class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <!-- Text Detail -->
+                <div class="lg:col-span-5 space-y-5 text-left">
+                    <span class="text-xs font-bold text-brand-600 tracking-wider uppercase">UI/UX Phase 1</span>
+                    <h2 class="text-3xl font-extrabold text-slate-950">진입 장벽을 완전히 허문 인트로 화면</h2>
+                    <p class="text-slate-500 text-sm leading-relaxed">
+                        사용자가 첫 접속 시 마주하는 스크린은 미니멀하면서 강력한 브랜딩 효과
+                    </p>
+
+                    <div class="space-y-3 pt-2">
+                        <!-- Key point 1 -->
+                        <div class="flex items-start space-x-3 text-sm">
+                            <div class="bg-brand-100 text-brand-600 p-1.5 rounded-xl mt-0.5 shrink-0">
+                                <i class="fa-solid fa-compass"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900">통합 원 검색 프롬프트</h4>
+                                <p class="text-xs text-slate-500">중앙에 "무엇이든 물어보세요..." 텍스트와 우주선 형상의 빔이 결합되어 있어 질문 검색 가이드를
+                                    직관적으로 제공합니다.</p>
+                            </div>
+                        </div>
+                        <!-- Key point 2 -->
+                        <div class="flex items-start space-x-3 text-sm">
+                            <div class="bg-purple-100 text-purple-600 p-1.5 rounded-xl mt-0.5 shrink-0">
+                                <i class="fa-solid fa-ring"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900">소환을 기다리는 원형 빔 베이스</h4>
+                                <p class="text-xs text-slate-500">무대형 발판이 흐릿하게 활성화되어 에이전트 소환 전 기대감을 자극합니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Interactive Preview Mockup -->
+                <div
+                    class="lg:col-span-7 bg-white p-4 rounded-3xl border border-slate-200 shadow-lg relative overflow-hidden group">
+                    <img src="qrayon/intro.png" alt="Intro Screen Dashboard"
+                        class="w-full h-auto rounded-2xl object-cover hover:scale-[1.02] transition-transform duration-500 thumbnail-clickable"
+                        onerror="this.src='qrayon/intro.png'" onclick="openLightbox(this.src)">
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: Visual walkthrough - Main Dashboard (main.jpg) -->
+        <section class="slide flex items-center justify-center p-6 md:p-12" id="slide-6">
+            <div class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <!-- Interactive Preview Mockup -->
+                <div
+                    class="lg:col-span-7 bg-white p-4 rounded-3xl border border-slate-200 shadow-lg relative overflow-hidden grouporder-last lg:order-first">
+                    <img src="main.jpg" alt="Main Dashboard Screen"
+                        class="w-full h-auto rounded-2xl object-cover hover:scale-[1.02] transition-transform duration-500 thumbnail-clickable"
+                        onerror="this.src='qrayon/main.png'" onclick="openLightbox(this.src)">
+
+                </div>
+                <!-- Text Detail -->
+                <div class="lg:col-span-5 space-y-5 text-left">
+                    <span class="text-xs font-bold text-brand-600 tracking-wider uppercase">UI/UX Phase 2</span>
+                    <h2 class="text-3xl font-extrabold text-slate-950">올인원 지식 관제 메인 대시보드</h2>
+                    <p class="text-slate-500 text-sm leading-relaxed">
+                        메인화면은 4개의 스마트 존으로 설계되어 팀장이 즉각적으로 상태를 관제하고 의사결정할 수 있게 돕습니다.
+                    </p>
+
+                    <div class="space-y-2 text-xs text-slate-600">
+                        <div
+                            class="flex items-center space-x-2 bg-white px-3 py-2.5 rounded-xl border border-slate-100 shadow-sm">
+                            <span class="font-bold text-brand-600 w-24 shrink-0">1. 좌측 바</span>
+                            <span>통합 리소스 게이지(GPU 사용량) 및 시스템 현황</span>
+                        </div>
+                        <div
+                            class="flex items-center space-x-2 bg-white px-3 py-2.5 rounded-xl border border-slate-100 shadow-sm">
+                            <span class="font-bold text-purple-600 w-24 shrink-0">2. 중앙 상단</span>
+                            <span>일일 핵심 전사 브리핑 및 문서 리스트</span>
+                        </div>
+                        <div
+                            class="flex items-center space-x-2 bg-white px-3 py-2.5 rounded-xl border border-slate-100 shadow-sm">
+                            <span class="font-bold text-cyan-600 w-24 shrink-0">3. 중앙 하단</span>
+                            <span>실시간 에이전트 활동 애니메이션 UI 제공</span>
+                        </div>
+                        <div
+                            class="flex items-center space-x-2 bg-white px-3 py-2.5 rounded-xl border border-slate-100 shadow-sm">
+                            <span class="font-bold text-teal-600 w-24 shrink-0">4. 우측 채팅</span>
+                            <span>대화형 프롬프트 영역 및 원클릭 자동 템플릿 추천 패널</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 7: System Architecture & Data Security Policies -->
+        <section class="slide flex items-center justify-center p-6 md:p-12" id="slide-7">
+            <div class="max-w-6xl w-full space-y-8">
+                <div class="text-center space-y-2">
+                    <span class="text-xs font-bold text-brand-600 tracking-wider uppercase">System & Security</span>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900">운영 정책 및 데이터 보안 아키텍처</h2>
+                    <p class="text-slate-500">기업의 가장 소중한 지식 자산을 철저하고 무해하게 다룹니다.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+                    <!-- Policy 1 -->
+                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm hover:shadow-md transition">
+                        <div
+                            class="w-12 h-12 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center text-xl mb-4">
+                            <i class="fa-solid fa-network-wired"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-950 mb-2">로컬 지식 공유 (Agent RAG)</h3>
+                        <p class="text-slate-500 text-xs leading-relaxed">
+                            한 에이전트가 탐색하거나 가공한 데이터 인덱스는 중앙 지식 허브를 통해 타 에이전트들과 실시간 실마리가 공유되어 상호 교차 피드백의 기반을 제공합니다.
+                        </p>
+                    </div>
+
+                    <!-- Policy 2 -->
+                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm hover:shadow-md transition">
+                        <div
+                            class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl mb-4">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-950 mb-2">완전 격리 샌드박스 테넌트</h3>
+                        <p class="text-slate-500 text-xs leading-relaxed">
+                            사내 인트라넷 보안 준수를 위해 타 가상 머신이나 외부 퍼블릭 거대 언어 모델 학습 모델에 자사의 데이터 세트가 유출되지 않도록 전용 하이브리드 RAG 망으로 차단
+                            구축합니다.
+                        </p>
+                    </div>
+
+                    <!-- Policy 3 -->
+                    <div class="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm hover:shadow-md transition">
+                        <div
+                            class="w-12 h-12 rounded-2xl bg-cyan-50 text-cyan-600 flex items-center justify-center text-xl mb-4">
+                            <i class="fa-solid fa-key"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-950 mb-2">권한 필터 세분화 연동</h3>
+                        <p class="text-slate-500 text-xs leading-relaxed">
+                            부서별 및 직급 등급 분류 체계(Role-Based Access Control)에 연동하여 하위 권한 등급을 가진 에이전트의 불필요한 기밀문서 조회 탐색을 실시간
+                            사전 블로킹합니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 8: Step-by-Step Roadmap & Future Vision -->
+        <section class="slide flex items-center justify-center p-6 md:p-12" id="slide-8">
+            <div class="max-w-4xl w-full text-center space-y-8">
+                <div class="space-y-4">
+                    <span
+                        class="bg-gradient-to-r from-brand-500 to-purple-600 text-white text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider">Vision
+                        Roadmap</span>
+                    <h2 class="text-4xl md:text-5xl font-black text-slate-950 tracking-tight">큐레이온과 함께 할 스마트 오피스의 미래
+                    </h2>
+                    <p class="text-slate-500 text-base max-w-xl mx-auto">
+                        단순 지식의 축적을 넘어 가상의 자율 지능 조직원들과 함께 일하며, 소수의 조직만으로 초거대 생산성을 달성하게 합니다.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6 text-left">
+                    <div class="bg-slate-100/50 p-5 rounded-2xl border border-slate-200">
+                        <span class="text-brand-600 font-extrabold text-sm block mb-1">Phase 1: MVP Core (현재)</span>
+                        <h4 class="font-bold text-slate-900 text-sm mb-2">지식 RAG 패키지 구축</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">자율 에이전트 핵심 상태 팝업 및 기초 가상 무대 애니메이션과 원형 검색창 중심
+                            인터페이스 구현.</p>
+                    </div>
+                    <div class="bg-slate-100/50 p-5 rounded-2xl border border-slate-200">
+                        <span class="text-brand-600 font-extrabold text-sm block mb-1">Phase 2: Dynamic Team (6M)</span>
+                        <h4 class="font-bold text-slate-900 text-sm mb-2">병렬 과업 오케스트레이션</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">지시된 통합 프로젝트를 5가지 하위 과업으로 쪼개서 분산 처리하는 GPU 스케줄러
+                            알고리즘 탑재.</p>
+                    </div>
+                    <div
+                        class="bg-slate-100/50 p-5 rounded-2xl border border-slate-200 bg-gradient-to-tr from-brand-50 to-purple-50 border-brand-200">
+                        <span class="text-purple-600 font-extrabold text-sm block mb-1">Phase 3: Ecosystem (12M)</span>
+                        <h4 class="font-bold text-slate-900 text-sm mb-2">전사 업무 메신저 전면 연동</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed">Slack, Teams 등과 직접 연동하여 인간과 5대 AI 에이전트 간의 동적
+                            알림 생태계 고도화 완료.</p>
+                    </div>
+                </div>
+
+                <div class="pt-6 flex justify-center">
+                    <button onclick="changeSlide(1)"
+                        class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-8 py-3.5 rounded-2xl shadow-lg transition-transform hover:-translate-y-0.5">
+                        <i class="fa-solid fa-rotate-left mr-2"></i>처음으로 돌아가기
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Slides Bottom Controller Navigation Bar -->
+    <footer
+        class="fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-slate-100 px-6 flex items-center justify-between z-50">
+        <!-- Developer Brand/Copyright -->
+        <span class="text-xs text-slate-400 font-medium">© 2026 Qrayon Co. All rights reserved.</span>
+
+        <!-- Center Quick Dot Indicators -->
+        <div class="flex items-center space-x-2" id="dot-indicators">
+            <!-- Dynamically populated in JavaScript -->
+        </div>
+
+        <!-- Right Prev/Next Action Buttons -->
+        <div class="flex items-center space-x-3">
+            <button onclick="prevSlide()"
+                class="bg-slate-100 text-slate-600 hover:bg-slate-200 w-10 h-10 rounded-full flex items-center justify-center transition active:scale-95"
+                title="이전 (Left Arrow)">
+                <i class="fa-solid fa-chevron-left text-sm"></i>
+            </button>
+            <button onclick="nextSlide()"
+                class="bg-brand-600 text-white hover:bg-brand-700 w-10 h-10 rounded-full flex items-center justify-center shadow-md transition active:scale-95"
+                title="다음 (Right Arrow)">
+                <i class="fa-solid fa-chevron-right text-sm"></i>
+            </button>
+        </div>
+    </footer>
+
+    <!-- Slide Engine Script -->
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 8;
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        // Initialize Slider Dots and Listeners
+        window.onload = function () {
+            createDotIndicators();
+            updateSlideView();
+            initTouchEvents();
+
+            // Log warm-up
+        }
+
+        // Generate slide dot tracker indicators
+        function createDotIndicators() {
+            const container = document.getElementById('dot-indicators');
+            container.innerHTML = '';
+            for (let i = 1; i <= totalSlides; i++) {
+                const dot = document.createElement('button');
+                dot.className = `w-2 h-2 rounded-full transition-all duration-300 ${i === 1 ? 'bg-brand-600 w-6' : 'bg-slate-200 hover:bg-slate-300'}`;
+                dot.id = `dot-${i}`;
+                dot.setAttribute('onclick', `changeSlide(${i})`);
+                container.appendChild(dot);
+            }
+        }
+
+        // Change slide by absolute index
+        function changeSlide(index) {
+            if (index < 1 || index > totalSlides) return;
+
+            const prevIndex = currentSlide;
+            currentSlide = index;
+
+            document.getElementById(`slide-${prevIndex}`).classList.remove('active');
+            if (prevIndex < currentSlide) {
+                document.getElementById(`slide-${prevIndex}`).classList.add('prev');
+            } else {
+                document.getElementById(`slide-${prevIndex}`).classList.remove('prev');
+            }
+
+            document.getElementById(`slide-${currentSlide}`).classList.remove('prev');
+            document.getElementById(`slide-${currentSlide}`).classList.add('active');
+
+            updateSlideView();
+        }
+
+        // Increment slide helper
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                changeSlide(currentSlide + 1);
+            }
+        }
+
+        // Decrement slide helper
+        function prevSlide() {
+            if (currentSlide > 1) {
+                changeSlide(currentSlide - 1);
+            }
+        }
+
+        // Keep view indicators in sync
+        function updateSlideView() {
+            document.getElementById('current-index').innerText = currentSlide;
+
+            // Sync indicators
+            for (let i = 1; i <= totalSlides; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                if (dot) {
+                    if (i === currentSlide) {
+                        dot.className = "w-2 h-2 rounded-full transition-all duration-300 bg-brand-600 w-6";
+                    } else {
+                        dot.className = "w-2 h-2 rounded-full transition-all duration-300 bg-slate-200 hover:bg-slate-300";
+                    }
+                }
+            }
+        }
+
+        // Key bindings
+        window.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowRight' || e.key === 'Space') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+
+        // Touch Swipe Gestures mapping
+        function initTouchEvents() {
+            const main = document.querySelector('main');
+            main.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, false);
+
+            main.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipeGesture();
+            }, false);
+        }
+
+        function handleSwipeGesture() {
+            const threshold = 50; // Minimum pixels moved to recognize swipe
+            if (touchStartX - touchEndX > threshold) {
+                nextSlide(); // Swiped left -> Next slide
+            } else if (touchEndX - touchStartX > threshold) {
+                prevSlide(); // Swiped right -> Previous slide
+            }
+        }
+
+        // Fullscreen activation helper
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error enabling full-screen mode: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Lightbox functions
+        function openLightbox(src) {
+            const overlay = document.getElementById('lightbox-overlay');
+            const img = document.getElementById('lightbox-img');
+            img.src = src;
+            overlay.classList.add('active');
+        }
+
+        function closeLightbox(e) {
+            // Only close if clicking overlay background or close button, not the image itself
+            if (e.target.id === 'lightbox-img') return;
+            const overlay = document.getElementById('lightbox-overlay');
+            overlay.classList.remove('active');
+        }
+
+        // Close lightbox on Escape key
+        window.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                const overlay = document.getElementById('lightbox-overlay');
+                if (overlay.classList.contains('active')) {
+                    overlay.classList.remove('active');
+                }
+            }
+        });
+
+    </script>
+</body>
+
+</html>
